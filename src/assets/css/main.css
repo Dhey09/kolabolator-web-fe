@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black: #202121;
+  --color-primary: #1e40af;
+  --color-primary-light: #3b82f6;
+  --color-primary-dark: #161b6d;
+  --color-secondary: #f59e0b;
+  --color-accent: #10b981;
+}
+
+@font-face {
+  font-family: "Blippo";
+  src: url("@/assets/font/blippo.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer utilities {
+  .font-blippo {
+    font-family: "Blippo", sans-serif;
+  }
+}
+
+@layer components {
+  .layout {
+    @apply flex h-screen w-screen justify-center items-center;
+  }
+
+  .font-blippo {
+    font-family: "Blippo", sans-serif;
+  }
+}
