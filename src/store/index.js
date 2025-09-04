@@ -8,6 +8,7 @@ import chapter from "./modules/chapter";
 import collaborator from "./modules/collaborator";
 import template from "./modules/template";
 import payment from "./modules/payment";
+import form from "./modules/form";
 
 export default createStore({
   modules: {
@@ -20,5 +21,6 @@ export default createStore({
     collaborator,
     template,
     payment,
+    form
   },
 });

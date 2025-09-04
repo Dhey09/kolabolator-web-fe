@@ -91,7 +91,36 @@ import { useStore } from "vuex";
 import { computed, onMounted, ref, resolveComponent } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { LogoutOutlined } from "@ant-design/icons-vue";
-import BaseModal from "../components/BaseModal.vue";
+import BaseModal from "@/components/BaseModal.vue";
+
+import { Modal } from "ant-design-vue";
+
+const hasUnsaved = computed(() => store.state.form.hasUnsavedChanges);
+
+const handleClick = (menu) => {
+  if (!menu.path) return;
+
+  if (hasUnsaved.value) {
+    Modal.confirm({
+      title: "Data belum disimpan",
+      content: "Perubahan Anda belum disimpan. Yakin mau pindah halaman?",
+      okText: "Ya, pindah",
+      cancelText: "Batal",
+      onOk: () => {
+        store.commit("form/SET_UNSAVED", false);
+        router.push(menu.path);
+      },
+    });
+  } else {
+    router.push(menu.path);
+  }
+};
+
+// const handleClick = (menu) => {
+//   if (menu.path) {
+//     router.push(menu.path);
+//   }
+// };
 
 const store = useStore();
 const router = useRouter();
@@ -115,12 +144,6 @@ const getIcon = (iconName) => {
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join("");
   return resolveComponent(pascal + "Outlined");
-};
-
-const handleClick = (menu) => {
-  if (menu.path) {
-    router.push(menu.path);
-  }
 };
 
 // aktif jika path saat ini diawali dengan path menu

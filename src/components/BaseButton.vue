@@ -6,18 +6,28 @@
     <!-- Actions -->
     <div class="flex gap-2">
       <!-- Export Button -->
-      <a-button v-if="isExport" type="default" @click="isExport">
-        <div class="flex items-center justify-center">
-          <UploadOutlined />
-        </div>
-      </a-button>
+      <a-tooltip placement="top">
+        <template #title>
+          <span>Import File</span>
+        </template>
+        <a-button v-if="isExport" type="default" @click="isExport">
+          <div class="flex items-center justify-center">
+            <UploadOutlined />
+          </div>
+        </a-button>
+      </a-tooltip>
 
       <!-- Download Button -->
-      <a-button v-if="isDownload" type="default" @click="isDownload">
-        <div class="flex items-center justify-center">
-          <DownloadOutlined />
-        </div>
-      </a-button>
+      <a-tooltip placement="top">
+        <template #title>
+          <span>Download Template</span>
+        </template>
+        <a-button v-if="isDownload" type="default" @click="isDownload">
+          <div class="flex items-center justify-center">
+            <DownloadOutlined />
+          </div>
+        </a-button>
+      </a-tooltip>
       <!-- Search -->
       <a-input-search
         v-if="isSearch"
@@ -34,11 +44,16 @@
       </a-input-search>
 
       <!-- Add Button -->
-      <a-button v-if="isAdd" type="primary" @click="isAdd">
-        <div class="flex items-center justify-center">
-          <PlusOutlined />
-        </div>
-      </a-button>
+      <a-tooltip placement="top">
+        <template #title>
+          <span>Tambah Data</span>
+        </template>
+        <a-button v-if="isAdd" type="primary" @click="isAdd">
+          <div class="flex items-center justify-center">
+            <PlusOutlined />
+          </div>
+        </a-button>
+      </a-tooltip>
     </div>
   </div>
 </template>

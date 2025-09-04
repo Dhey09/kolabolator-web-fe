@@ -6,6 +6,8 @@
     <BaseButton
       :title="'Daftar Judul Buku'"
       :isAdd="handleAdd"
+      :isExport="handleClickImport"
+      :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
     <a-spin :spinning="loading">
@@ -16,6 +18,12 @@
         :onEdit="editBook"
         :onDelete="deleteBook"
         :onUpdateStatus="updateStatus"
+      />
+      <BaseImport
+        v-model:open="showModal"
+        title="Import Buku"
+        :loading="loading"
+        @import="handleImport"
       />
     </a-spin>
   </a-card>
@@ -29,6 +37,8 @@ import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
+import BaseImport from "@/components/BaseImport.vue";
+
 
 const router = useRouter();
 const store = useStore();
@@ -36,11 +46,28 @@ const page = ref(0);
 const perPage = ref(10);
 const books = computed(() => store.getters["book/allBooks"]);
 const loading = computed(() => store.getters["book/loading"]);
+const showModal = ref(false);
 
-const handleExport = () => {
+const handleClickImport = () => {
+  showModal.value = true;
 };
 
-const handleDownload = () => {
+const handleImport = async (file) => {
+  loading.value = true;
+  try {
+    await store.dispatch("book/importBook", file);
+    message.success("Buku berhasil diimport!");
+    showModal.value = false;
+  } catch (err) {
+    message.error("Gagal import buku");
+  } finally {
+    await fetchData();
+    loading.value = false;
+  }
+};
+
+const handleDownload = async () => {
+  await store.dispatch("book/bookTemplate");
 };
 
 const handleSearch = (val) => {
@@ -63,7 +90,13 @@ const columns = [
   { title: "Kategori Buku", dataIndex: "category_name", key: "category_name" },
   { title: "Judul Buku", dataIndex: "title", key: "title" },
   { title: "Deskripsi", dataIndex: "description", key: "description" },
-  { title: "Status", dataIndex: "status", key: "status", fixed:"right", align:"center" },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    fixed: "right",
+    align: "center",
+  },
 ];
 
 // Aksi

@@ -102,8 +102,8 @@
           class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-8"
         >
           <p class="sm:w-2/3 text-gray-600 text-sm leading-relaxed">
-            **) Pembayaran sedang di check, jika status tidak berubah dalam 1
-            jam, harap hubungi admin dengan nomor 08123456789
+            **) Pembayaran sedang di check, jika pembayaran belum dikonfirmasi
+            dalam 1 jam, harap hubungi admin dengan nomor 08123456789
           </p>
           <div>
             <!-- Tombol Konfirmasi -->

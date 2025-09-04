@@ -9,12 +9,25 @@
       :fields="fields"
       :rules="rules"
       @submit="handleSubmit(formData)"
-      @cancel="handleCancel"
+      @cancel="isShowModal"
+      @change="markUnsaved"
+    />
+
+    <BaseModal
+      v-model:open="showModal"
+      title="Konfirmasi Batal"
+      :confirmLoading="loading"
+      :content="`Data belum disimpan, yakin batalkan?`"
+      ok-text="Ya, Kembali"
+      cancel-text="Batal"
+      @ok="handleCancel"
+      @cancel="showModal = false"
     />
   </a-spin>
 </template>
 
 <script setup>
+import BaseModal from "@/components/BaseModal.vue";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import BaseForm from "@/components/BaseForm.vue";
 import { message } from "ant-design-vue";
@@ -70,12 +83,16 @@ const rules = {
   title: [{ required: true, message: "Judul buku wajib diisi" }],
 };
 
+const markUnsaved = () => {
+  store.commit("form/SET_UNSAVED", true);
+};
 const handleSubmit = async (values) => {
   try {
     const payload = {
       ...values,
     };
     await store.dispatch("book/createBook", payload);
+    store.commit("form/SET_UNSAVED", false);
     formData.value = {};
     message.success("Judul buku berhasil ditambahkan");
   } catch (err) {
@@ -85,8 +102,13 @@ const handleSubmit = async (values) => {
     router.push("/book");
   }
 };
+const showModal = ref(false);
+const isShowModal = () => {
+  showModal.value = true;
+};
 const handleCancel = () => {
   router.push("/book");
+  store.commit("form/SET_UNSAVED", false);
 };
 
 onMounted(async () => {

@@ -30,7 +30,7 @@ const state = {
     },
     {
       key: "payment_history",
-      label: "History Pembelian",
+      label: "Riwayat Pembelian",
       path: "/payment-history",
       icon: "shop",
       role_id: [1, 2, 3],

@@ -162,7 +162,7 @@ const props = defineProps({
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
-const emits = defineEmits(["update:modelValue", "submit", "cancel"]);
+const emits = defineEmits(["update:modelValue", "submit", "cancel", "change"]);
 
 const localModel = reactive({ ...props.modelValue });
 
@@ -172,7 +172,14 @@ watch(
   { deep: true }
 );
 
-watch(localModel, (val) => emits("update:modelValue", val), { deep: true });
+watch(
+  localModel,
+  (val) => {
+    emits("update:modelValue", val);
+    emits("change", val);
+  },
+  { deep: true }
+);
 
 const handleSubmit = () => {
   emits("submit", { ...localModel });

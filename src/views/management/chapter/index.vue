@@ -6,6 +6,8 @@
     <BaseButton
       :title="'Daftar Judul Bagian'"
       :isAdd="handleAdd"
+      :isExport="handleClickImport"
+      :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
     <a-spin :spinning="loading">
@@ -15,6 +17,12 @@
         :scroll="{ x: 'max-conten', y: 380 }"
         :onEdit="editData"
         :onDelete="deleteData"
+      />
+      <BaseImport
+        v-model:open="showModal"
+        title="Import Bagian"
+        :loading="loading"
+        @import="handleImport"
       />
     </a-spin>
   </a-card>
@@ -28,6 +36,7 @@ import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
+import BaseImport from "@/components/BaseImport.vue";
 
 const router = useRouter();
 const store = useStore();
@@ -35,11 +44,29 @@ const page = ref(0);
 const perPage = ref(10);
 const chapters = computed(() => store.getters["chapter/allChapters"]);
 const loading = computed(() => store.getters["chapter/loading"]);
+const showModal = ref(false);
 
-const handleExport = () => {
+const handleClickImport = () => {
+  showModal.value = true;
 };
 
-const handleDownload = () => {
+const handleImport = async (file) => {
+  loading.value = true;
+  try {
+    await store.dispatch("chapter/importChapter", file);
+    message.success("Bagian berhasil diimport!");
+    showModal.value = false;
+  } catch (err) {
+    message.error("Gagal import bagian");
+  } finally {
+    await fetchData();
+    loading.value = false;
+  }
+};
+
+
+const handleDownload = async () => {
+    await store.dispatch("chapter/chapterTemplate");
 };
 
 const handleSearch = (val) => {

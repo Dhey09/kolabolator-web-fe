@@ -7,7 +7,7 @@ const state = () => ({
   editCategoryId: null,
   total: 0,
   page: 0,
-  perPage: 10,
+  perPage: 100,
   loading: false,
 });
 
@@ -104,6 +104,46 @@ const actions = {
       await api.post("/categories/delete-category", body);
     } catch (error) {
       console.error("Error delete category:", error);
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
+
+  async importCategory({ commit }, file) {
+    commit("SET_LOADING", true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await api.post("/categories/import", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
+
+  async categoryTemplate({ commit }) {
+    commit("SET_LOADING", true);
+    try {
+      const response = await api.get("/categories/template", {
+        responseType: "blob", // penting!
+      });
+
+      // buat file dari response
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "category_template.xlsx"; // nama file
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download gagal:", err);
     } finally {
       commit("SET_LOADING", false);
     }

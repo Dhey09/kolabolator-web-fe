@@ -8,13 +8,26 @@
       :title="'Tambah Kategori Buku'"
       :fields="fields"
       :rules="rules"
-      @submit="handleSubmit(formData)"
-      @cancel="handleCancel"
+      @submit="handleSubmit"
+      @cancel="isShowModal"
+      @change="markUnsaved"
+    />
+
+    <BaseModal
+      v-model:open="showModal"
+      title="Konfirmasi Batal"
+      :confirmLoading="loading"
+      :content="`Data belum disimpan, yakin batalkan?`"
+      ok-text="Ya, Kembali"
+      cancel-text="Batal"
+      @ok="handleCancel"
+      @cancel="showModal = false"
     />
   </a-spin>
 </template>
 
 <script setup>
+import BaseModal from "@/components/BaseModal.vue";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import BaseForm from "@/components/BaseForm.vue";
 import { message } from "ant-design-vue";
@@ -32,6 +45,7 @@ const router = useRouter();
 const store = useStore();
 const formData = ref({});
 const loading = computed(() => store.state.category.loading);
+
 
 // field awal tanpa options
 const fields = ref([
@@ -52,12 +66,26 @@ const rules = {
   name: [{ required: true, message: "Kategori wajib diisi" }],
 };
 
+const markUnsaved = () => {
+  store.commit("form/SET_UNSAVED", true);
+};
+
+const showModal = ref(false);
+const isShowModal = () => {
+  showModal.value = true;
+};
+const handleCancel = () => {
+  router.push("/");
+  store.commit("form/SET_UNSAVED", false)
+};
+
 const handleSubmit = async (values) => {
   try {
     const payload = {
       ...values,
     };
     await store.dispatch("category/createCategory", payload);
+    store.commit("form/SET_UNSAVED", false);
     formData.value = {};
     message.success("Kategori buku berhasil ditambahkan");
   } catch (err) {
@@ -67,7 +95,5 @@ const handleSubmit = async (values) => {
     router.push("/category");
   }
 };
-const handleCancel = () => {
-  router.push("/category");
-};
+
 </script>

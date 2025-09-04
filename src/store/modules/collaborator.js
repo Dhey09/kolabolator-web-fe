@@ -10,7 +10,7 @@ const state = () => ({
   editCollaboratorId: null,
   total: 0,
   page: 0,
-  perPage: 10,
+  perPage: 100,
   loading: false,
 });
 

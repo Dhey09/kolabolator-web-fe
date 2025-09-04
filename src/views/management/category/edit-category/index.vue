@@ -4,25 +4,30 @@
   </div>
   <a-spin :spinning="loading">
     <BaseForm
-      :title="'Edit Kategori Buku'"
       v-model="formData"
+      :title="'Edit Kategori Buku'"
       :fields="fields"
       :rules="rules"
       @submit="handleSubmit"
-    >
-      <template #actions>
-        <div class="flex justify-end">
-          <a-space>
-            <a-button type="default" @click="handleCancel">Batal</a-button>
-            <a-button type="primary" html-type="submit">Simpan</a-button>
-          </a-space>
-        </div>
-      </template>
-    </BaseForm>
+      @cancel="isShowModal"
+      @change="markUnsaved"
+    />
+
+    <BaseModal
+      v-model:open="showModal"
+      title="Konfirmasi Batal"
+      :confirmLoading="loading"
+      :content="`Data belum disimpan, yakin batalkan?`"
+      ok-text="Ya, Kembali"
+      cancel-text="Batal"
+      @ok="handleCancel"
+      @cancel="showModal = false"
+    />
   </a-spin>
 </template>
 
 <script setup>
+import BaseModal from "@/components/BaseModal.vue";
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -69,6 +74,10 @@ const fetchData = async () => {
   }
 };
 
+const markUnsaved = () => {
+  store.commit("form/SET_UNSAVED", true);
+};
+
 const handleSubmit = async (values) => {
   const payload = {
     id: editCategoryId.value,
@@ -78,14 +87,20 @@ const handleSubmit = async (values) => {
   try {
     await store.dispatch("category/fetchUpdateCategory", payload);
     message.success("Kategori berhasil diupdate");
+    store.commit("form/SET_UNSAVED", false);
     router.push("/category");
   } catch {
     message.error("Gagal update category");
   }
 };
 
+const showModal = ref(false);
+const isShowModal = () => {
+  showModal.value = true;
+};
 const handleCancel = () => {
   router.push("/category");
+  store.commit("form/SET_UNSAVED", false);
 };
 
 onMounted(fetchData);

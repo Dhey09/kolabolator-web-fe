@@ -5,13 +5,13 @@ const state = () => ({
   chapters: [],
   chapterDetail: [],
   chapterByBook: [],
-  chapterByCategory: [],
+  chapterBychapter: [],
   personalCheckoutChapter: [],
   checkoutChapterList: [],
   editChapterId: null,
   total: 0,
   page: 0,
-  perPage: 10,
+  perPage: 100,
   loading: false,
   totalChapterByBook: 0,
 });
@@ -19,7 +19,7 @@ const state = () => ({
 const getters = {
   allChapters: (state) => state.chapters,
   chapterByBook: (state) => state.chapterByBook,
-  chapterByCategory: (state) => state.chapterByCategory,
+  chapterBychapter: (state) => state.chapterBychapter,
   personalCheckoutChapter: (state) => state.personalCheckoutChapter,
   checkoutChapterList: (state) => state.checkoutChapterList,
   totalChapters: (state) => state.total,
@@ -91,18 +91,18 @@ const actions = {
     }
   },
 
-  async fetchChapterByCategory({ commit }, payload) {
+  async fetchChapterBychapter({ commit }, payload) {
     commit("SET_LOADING", true);
     try {
       const body = {
-        category_id: payload.category_id,
+        chapter_id: payload.chapter_id,
         cari: payload.cari,
       };
       const response = await publicApi.post(
-        "/chapters/get-chapter-by-category-id",
+        "/chapters/get-chapter-by-chapter-id",
         body
       );
-      commit("SET_CHAPTER_BY_CATEGORY", response.data.data);
+      commit("SET_CHAPTER_BY_chapter", response.data.data);
     } catch (error) {
       console.error("Error fetching chapter by book:", error);
     } finally {
@@ -122,7 +122,7 @@ const actions = {
         body
       );
       commit("SET_CHAPTER_BY_BOOK", response.data.data);
-      commit("SET_TOTAL_CATEGORY_BY_BOOK", response.data.total);
+      commit("SET_TOTAL_chapter_BY_BOOK", response.data.total);
     } catch (error) {
       console.error("Error fetching chapter by book:", error);
     } finally {
@@ -236,6 +236,46 @@ const actions = {
       commit("SET_LOADING", false);
     }
   },
+
+  async importChapter({ commit }, file) {
+    commit("SET_LOADING", true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await api.post("/chapters/import", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
+
+  async chapterTemplate({ commit }) {
+    commit("SET_LOADING", true);
+    try {
+      const response = await api.get("/chapters/template", {
+        responseType: "blob", // penting!
+      });
+
+      // buat file dari response
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "chapter_template.xlsx"; // nama file
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download gagal:", err);
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
 };
 
 const mutations = {
@@ -245,8 +285,8 @@ const mutations = {
   SET_CHAPTERS(state, chapters) {
     state.chapters = chapters;
   },
-  SET_CHAPTER_BY_CATEGORY(state, chapters) {
-    state.chapterByCategory = chapters;
+  SET_CHAPTER_BY_chapter(state, chapters) {
+    state.chapterBychapter = chapters;
   },
   SET_CHAPTER_BY_BOOK(state, chapters) {
     state.chapterByBook = chapters;
@@ -263,7 +303,7 @@ const mutations = {
   SET_CHECKOUT_CHAPTER_LIST(state, chapter) {
     state.checkoutChapterList = chapter;
   },
-  SET_TOTAL_CATEGORY_BY_BOOK(state, total) {
+  SET_TOTAL_chapter_BY_BOOK(state, total) {
     state.totalChapterByBook = total;
   },
 };
