@@ -11,7 +11,7 @@
             class="w-8 h-8 mr-2 flex items-center justify-center"
           />
         </router-link>
-        <a-space>
+        <a-space :size="4">
           <div class="flex">
             <a-button
               type="link"
@@ -56,7 +56,12 @@
           <div class="flex">
             <a-button
               type="link"
-              @click="() => headerClick('ema.hilma565@gmail.com')"
+              @click="
+                () =>
+                  headerClick(
+                    'https://mail.google.com/mail/?view=cm&fs=1&to=ema.hilma565@gmail.com'
+                  )
+              "
             >
               <div class="text-white">
                 <MailOutlined />
