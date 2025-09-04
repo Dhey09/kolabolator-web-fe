@@ -6,6 +6,22 @@
         <h3 class="text-lg font-bold">{{ title }}</h3>
       </div>
       <hr class="mb-2 border-1 border-gray-100 mb-6" />
+      <div v-if="downloadTemplate" class="flex justify-end">
+        <a-space>
+          <a-button
+            type="primary"
+            @click="downloadFile(templates[0]?.script, 'Template', 'Naskah')"
+          >
+            <a-space> <DownloadOutlined /> Template Naskah </a-space>
+          </a-button>
+          <a-button
+            type="primary"
+            @click="downloadFile(templates[0]?.haki, 'Template', 'Haki')"
+          >
+            <a-space> <DownloadOutlined /> Template Haki </a-space>
+          </a-button>
+        </a-space>
+      </div>
 
       <a-form
         :model="localModel"
@@ -115,13 +131,6 @@
                 />
 
                 <!-- Download -->
-                <a-button
-                  v-else-if="field.type === 'download'"
-                  type="link"
-                  @click="() => window.open(localModel[field.name], '_blank')"
-                >
-                  Download
-                </a-button>
               </a-form-item>
             </a-col>
           </template>
@@ -147,20 +156,42 @@
 
 <script setup>
 import dayjs from "dayjs";
-import { reactive, watch } from "vue";
+import { computed, onMounted, reactive, watch } from "vue";
 import BaseUploadImg from "./BaseUploadImg.vue";
 import BaseUploadFile from "./BaseUploadFile.vue";
 import { message } from "ant-design-vue";
+import { useStore } from "vuex";
 
 const props = defineProps({
   title: { type: String, default: "" },
   fields: { type: Array, required: true },
   modelValue: { type: Object, default: () => ({}) },
   rules: { type: Object, default: () => ({}) },
+  downloadTemplate: { type: Boolean, default: false },
 });
+
+const store = useStore();
+const downloadFile = async (url, userName, type) => {
+  try {
+    const response = await fetch(url, { mode: "cors" }); // ambil file
+    if (!response.ok) throw new Error("Failed to download file");
+
+    const blob = await response.blob(); // konversi ke blob
+    const ext = url.split(".").pop(); // ambil ekstensi file
+    const a = document.createElement("a");
+    a.href = window.URL.createObjectURL(blob);
+    a.download = `${userName}_${type}.${ext}`; // nama file: Super Admin_naskah.pdf
+    a.click();
+    window.URL.revokeObjectURL(a.href);
+  } catch (err) {
+    console.error(err);
+    alert("Download gagal, coba lagi");
+  }
+};
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+const templates = computed(() => store.getters["template/allTemplates"]);
 
 const emits = defineEmits(["update:modelValue", "submit", "cancel", "change"]);
 
@@ -191,6 +222,11 @@ const handleCancel = () => {
   });
   emits("cancel");
 };
+
+onMounted(async () => {
+  await store.dispatch("template/fetchTemplates");
+  // console.log("template", templates.value[0].script)
+});
 </script>
 
 <style scoped>

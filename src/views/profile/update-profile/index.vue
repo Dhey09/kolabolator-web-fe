@@ -150,6 +150,7 @@ const fetchUser = async () => {
       agama: user.agama,
       pekerjaan: user.pekerjaan,
       alamat: user.alamat,
+      img: user.img
     };
   }
 };
