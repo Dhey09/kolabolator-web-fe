@@ -96,16 +96,16 @@ const actions = {
     commit("SET_LOADING", true);
     try {
       const body = {
-        book_id: payload.book_id,
+        category_id: payload.category_id,
         cari: payload.cari,
       };
       const response = await publicApi.post(
-        "/books/get-book-by-book",
+        "/books/get-book-by-category",
         body
       );
       commit("SET_BOOK_BY_book", response.data.data);
     } catch (error) {
-      console.error("Error fetching book by book:", error);
+      console.error("Error fetching book by category:", error);
     } finally {
       commit("SET_LOADING", false);
     }
