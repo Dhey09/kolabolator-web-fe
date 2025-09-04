@@ -51,7 +51,7 @@ const actions = {
         haki_url: payload.haki_url,
       };
 
-      await api.post("/templates/create-create-template", body);
+      await api.post("/templates/create-template", body);
     } catch (error) {
       console.error("Create Template Error:", error);
       throw error;
