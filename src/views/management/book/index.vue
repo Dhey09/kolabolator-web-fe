@@ -6,8 +6,6 @@
     <BaseButton
       :title="'Daftar Judul Buku'"
       :isAdd="handleAdd"
-      :isExport="handleExport"
-      :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
     <a-spin :spinning="loading">

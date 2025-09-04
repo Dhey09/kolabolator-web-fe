@@ -6,8 +6,6 @@
     <BaseButton
       :title="'Daftar Kategori'"
       :isAdd="handleAdd"
-      :isExport="handleExport"
-      :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
     <a-spin :spinning="loading">
@@ -38,11 +36,9 @@ const perPage = ref(10);
 const categories = computed(() => store.getters["category/allCategories"]);
 const loading = computed(() => store.getters["category/loading"]);
 
-const handleExport = () => {
-};
+const handleExport = () => {};
 
-const handleDownload = () => {
-};
+const handleDownload = () => {};
 
 const handleSearch = (val) => {
   store.dispatch("category/fetchCategories", {
