@@ -4,65 +4,77 @@
       <div
         class="text-lg font-bold text-white flex items-center justify-center"
       >
-        <template v-if="isAuthenticated">
-          <router-link to="/" class="flex items-center justify-center">
-            <img
-              src="@/assets/svg/logo.svg"
-              alt="Logo"
-              class="w-8 h-8 mr-2 flex items-center justify-center"
-            />
-          </router-link>
-          <a-space>
-            <div class="flex">
-              <PhoneFilled />
-              <span class="ml-2">0815-7000-699</span>
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <FacebookOutlined />
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <InstagramOutlined />
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <MailOutlined />
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <WhatsAppOutlined />
-            </div>
-          </a-space>
-          <!-- jika login -->
-          <!-- {{ currentUser.username.toUpperCase() }} ({{ currentUser.role_name }}) -->
-        </template>
-
-        <!-- jika belum login -->
-        <template v-else>
-          <a-space>
-            <div class="flex">
-              <PhoneFilled />
-              <span class="ml-2">0815-7000-699</span>
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <FacebookOutlined />
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <InstagramOutlined />
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <MailOutlined />
-            </div>
-            <div class="flex">|</div>
-            <div class="flex">
-              <WhatsAppOutlined />
-            </div>
-          </a-space>
-        </template>
+        <router-link to="/" class="flex items-center justify-center">
+          <img
+            src="@/assets/svg/logo.svg"
+            alt="Logo"
+            class="w-8 h-8 mr-2 flex items-center justify-center"
+          />
+        </router-link>
+        <a-space>
+          <div class="flex">
+            <a-button
+              type="link"
+              @click="() => headerClick('https://wa.me/qr/R2OTT6OXKBDIJ1')"
+            >
+              <div class="text-white">
+                <PhoneFilled />
+                <span class="ml-2">0823-1043-3735</span>
+              </div>
+            </a-button>
+          </div>
+          <div class="flex">|</div>
+          <div class="flex">
+            <a-button
+              type="link"
+              @click="
+                () => headerClick('https://www.facebook.com/penerbit.widina.9')
+              "
+            >
+              <div class="text-white">
+                <FacebookOutlined />
+              </div>
+            </a-button>
+          </div>
+          <div class="flex">|</div>
+          <div class="flex">
+            <a-button
+              type="link"
+              @click="
+                () =>
+                  headerClick(
+                    'https://www.instagram.com/penerbitwidina?igsh=MXE1cG1iMTczamJsYQ=='
+                  )
+              "
+            >
+              <div class="text-white">
+                <InstagramOutlined />
+              </div>
+            </a-button>
+          </div>
+          <div class="flex">|</div>
+          <div class="flex">
+            <a-button
+              type="link"
+              @click="() => headerClick('ema.hilma565@gmail.com')"
+            >
+              <div class="text-white">
+                <MailOutlined />
+              </div>
+            </a-button>
+          </div>
+          <div class="flex">|</div>
+          <div class="flex">
+            <a-button
+              type="link"
+              @click="() => headerClick('https://wa.me/qr/R2OTT6OXKBDIJ1')"
+            >
+              <div class="text-white">
+                <WhatsAppOutlined />
+              </div>
+            </a-button>
+          </div>
+        </a-space>
       </div>
     </div>
     <div class="ml-auto flex items-center gap-4">
@@ -136,6 +148,10 @@ const goLogin = () => {
 
 const goProfile = () => {
   router.push("/profile");
+};
+
+const headerClick = (url) => {
+  window.open(url, "_blank");
 };
 </script>
 

@@ -14,12 +14,12 @@
       </a-button>
     </div>
 
-    <a-button v-else>
+    <a-button type="primary" v-else>
       <LoadingOutlined v-if="loading" />
       <div v-else>
         <a-space>
-          <PlusOutlined />
-          <div class="ant-upload-text">Upload PDF/DOC</div>
+            <UploadOutlined />
+            <div class=""> PDF/DOC</div>
         </a-space>
       </div>
     </a-button>

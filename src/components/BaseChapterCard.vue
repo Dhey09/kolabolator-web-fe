@@ -1,7 +1,16 @@
 <template>
   <a-card hoverable :style="{ width: width + 'px' }">
     <template #cover>
-      <img :alt="title" :src="img" />
+      <a-image
+        :src="displayImage"
+        alt="preview"
+        style="
+          width: 100%;
+          height: 300px;
+          object-fit: cover;
+          border-radius: 6px;
+        "
+      />
     </template>
 
     <div class="flex w-full">
@@ -60,4 +69,8 @@ const formatRupiah = (value) => {
   }).format(value);
 };
 const isDisabled = computed(() => props.disabled);
+
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
+  .href;
+const displayImage = computed(() => props.img || defaultBook);
 </script>

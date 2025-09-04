@@ -12,7 +12,7 @@
         </template>
         <a-button v-if="isExport" type="default" @click="isExport">
           <div class="flex items-center justify-center">
-            <UploadOutlined />
+            <FileExcelOutlined />
           </div>
         </a-button>
       </a-tooltip>

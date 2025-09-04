@@ -73,7 +73,7 @@
           :key="item.id"
           :img="item.img"
           :title="item.title"
-          :actionText="'Lihat Detail'"
+          :actionText="'Ikut Kolaborasi'"
           :onClick="() => handleClick(item)"
           :width="280"
           class="shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl"

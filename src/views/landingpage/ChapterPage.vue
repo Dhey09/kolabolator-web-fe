@@ -17,7 +17,8 @@
     <div>
       <a-input-search
         size="medium"
-        placeholder="input search text"
+        placeholder="Cari Bab"
+        v-model:value="value"
         enter-button
         @search="onSearch"
       />
@@ -44,7 +45,7 @@
             <a-image
               v-for="item in chapters"
               :key="item.id"
-              :src="item.book_img"
+              :src="item.book_img || defaultBook"
               alt="Book Image"
               style="
                 width: 80%;
@@ -135,6 +136,8 @@ const store = useStore();
 const chapters = computed(() => store.getters["chapter/chapterByBook"]);
 const router = useRouter();
 const book_id = parseInt(localStorage.getItem("book_id"));
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
+  .href;
 
 const goCategory = () => {
   router.push("/");
@@ -143,7 +146,6 @@ const goCategory = () => {
 const handleClick = (item) => {
   // Simpan chapter_id ke localStorage
   localStorage.setItem("chapter_id", item.id);
-
 
   // Pindah ke halaman buku
   router.push("/checkout-page");

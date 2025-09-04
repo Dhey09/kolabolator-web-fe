@@ -74,6 +74,13 @@
           :width="60"
           :height="60"
           style="object-fit: cover; border-radius: 6px"
+          @click="
+            downloadFile(
+              record.payment_proof,
+              record.checkout_by_name,
+              'Bukti_pembayaran'
+            )
+          "
         />
         <span v-else
           ><a-image
@@ -96,87 +103,94 @@
       </template>
 
       <template v-else-if="column.key === 'status'">
-        
-          <div class="flex flex-col items-center justify-center">
-            <a-tag
-              style="display: inline-flex; align-items: center; gap: 24px; margin-bottom: 5px;"
-              :color="
-                record.status === 'pending' ||
-                record.status === 'need_completed'
-                  ? 'orange'
-                  : record.status === 'waiting' ||
-                    record.status === 'need_update' ||
-                    record.status === 'draft' ||
-                    record.status === 'editing' ||
-                    record.status === 'isbn_submission' ||
-                    record.status === 'published' ||
-                    record.status === 'printed'
-                  ? 'blue'
-                  : record.status === 'close' || record.status === 'completed'
-                  ? 'green'
-                  : 'gray'
-              "
-            >
-              <template v-if="record.status === 'pending'">
-                <div class="flex m-2">
-                  <ClockCircleOutlined />
-                </div>
-              </template>
-              <template v-else-if="record.status === 'waiting'">
-                <div class="flex m-2">
-                  <HourglassOutlined />
-                </div>
-              </template>
-              <template
-                v-else-if="
-                  record.status === 'close' || record.status === 'completed'
-                "
-              >
-                <div class="flex m-2">
-                  <CheckCircleOutlined />
-                </div>
-              </template>
-              <template
-                v-else-if="
+        <div class="flex flex-col items-center justify-center">
+          <a-tag
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 24px;
+              margin-bottom: 5px;
+            "
+            :color="
+              record.status === 'pending' || record.status === 'need_complete'
+                ? 'orange'
+                : record.status === 'waiting' ||
                   record.status === 'need_update' ||
-                  record.status === 'need_completed'
-                "
-              >
-                <div class="flex m-2">
-                  <FormOutlined />
-                </div>
-              </template>
-              <template v-else>
-                {{ record.status }}
-              </template>
-            </a-tag>
+                  record.status === 'draft' ||
+                  record.status === 'editing' ||
+                  record.status === 'isbn_submission' ||
+                  record.status === 'published' ||
+                  record.status === 'printed'
+                ? 'blue'
+                : record.status === 'close' || record.status === 'completed'
+                ? 'green'
+                : 'gray'
+            "
+          >
+            <template v-if="record.status === 'pending'">
+              <div class="flex m-2">
+                <ClockCircleOutlined />
+              </div>
+            </template>
+            <template v-else-if="record.status === 'waiting'">
+              <div class="flex m-2">
+                <HourglassOutlined />
+              </div>
+            </template>
             <template
-              v-if="
-                record.status === 'waiting' ||
-                record.status === 'need_update' ||
-                record.status === 'draft' ||
-                record.status === 'editing' ||
-                record.status === 'isbn_submission' ||
-                record.status === 'published' ||
-                record.status === 'printed'
+              v-else-if="
+                record.status === 'close' || record.status === 'completed'
               "
             >
-              <a-button
-                size="small"
-                v-if="onUpdateStatus"
-                type="primary"
-                @click="onUpdateStatus(record)"
-              >
-                Update Status
-              </a-button>
+              <div class="flex m-2">
+                <CheckCircleOutlined />
+              </div>
             </template>
-          </div>
-        
+            <template
+              v-else-if="
+                record.status === 'need_update' ||
+                record.status === 'need_complete'
+              "
+            >
+              <div class="flex m-2">
+                <FormOutlined />
+              </div>
+            </template>
+            <template v-else>
+              {{ record.status }}
+            </template>
+          </a-tag>
+          <template
+            v-if="
+              record.status === 'waiting' ||
+              record.status === 'need_update' ||
+              record.status === 'draft' ||
+              record.status === 'editing' ||
+              record.status === 'isbn_submission' ||
+              record.status === 'published' ||
+              record.status === 'printed'
+            "
+          >
+            <a-button
+              size="small"
+              v-if="onUpdateStatus"
+              type="primary"
+              @click="onUpdateStatus(record)"
+            >
+              Update Status
+            </a-button>
+          </template>
+        </div>
       </template>
 
       <!-- Kolom Actions -->
-      <template   v-else-if="column.key === 'actions' && (record.status !== 'completed' && record.status !== 'close')"
->
+      <template
+        v-else-if="
+          column.key === 'actions' &&
+          record.status !== 'completed' &&
+          record.status !== 'close'
+        "
+      >
         <a-space>
           <a-button
             size="small"
@@ -267,7 +281,7 @@ import {
 } from "@ant-design/icons-vue";
 import { computed } from "vue";
 
-const defaultBook = new URL("@/assets/img/bookImg.png", import.meta.url).href;
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url).href;
 
 const props = defineProps({
   columns: { type: Array, required: true },
@@ -311,7 +325,7 @@ const computedColumns = computed(() => {
     {
       title: "No",
       key: "no",
-      width:80,
+      width: 80,
       fixed: "left",
       align: "center",
     },

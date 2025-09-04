@@ -5,7 +5,7 @@ const state = {
       label: "Dashboard",
       path: "/dashboard",
       icon: "dashboard",
-      role_id: [1, 2, 3, 4],
+      role_id: [1, 2, 3],
     },
     {
       key: "check-document",
@@ -19,8 +19,15 @@ const state = {
       label: "Kolaborator",
       path: "/collaborator",
       icon: "team",
-      role_id: [1, 2, 3, 4],
+      role_id: [1, 2, 3],
     },
+    //  {
+    //   key: "list-collaborator",
+    //   label: "Daftar Kolaborator",
+    //   path: "/list-collaborator",
+    //   icon: "team",
+    //   role_id: [1, 2],
+    // },
     {
       key: "request_list",
       label: "Cek Pembayaran",
@@ -90,7 +97,7 @@ const state = {
       key: "category",
       label: "Kategori",
       icon: "read",
-      role_id: [1, 2, 3, 4],
+      role_id: [1, 2, 3],
       children: [
         // {
         //   key: "bahasa",

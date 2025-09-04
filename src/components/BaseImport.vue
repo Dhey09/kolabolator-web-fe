@@ -9,9 +9,11 @@
     @cancel="closeModal"
   >
     <!-- Upload Excel -->
-    <a-upload :before-upload="beforeUpload" :show-upload-list="false">
-      <a-button type="primary">Pilih File Excel</a-button>
-    </a-upload>
+    <div class="flex items-center justify-center">
+      <a-upload :before-upload="beforeUpload" :show-upload-list="true">
+        <a-button type="primary">Pilih File Excel</a-button>
+      </a-upload>
+    </div>
 
     <div v-if="helpText" class="mt-2 text-gray-500 text-sm">
       {{ helpText }}

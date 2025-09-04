@@ -2,16 +2,16 @@
   <a-card hoverable :style="{ width: width + 'px' }">
     <!-- Cover Image -->
     <template #cover>
-      <a-image
-        :src="displayImage"
-        alt="preview"
-        style="
-          width: 80%;
-          height: 150px;
-          object-fit: cover;
-          border-radius: 6px;
-        "
-      />
+        <a-image
+          :src="displayImage"
+          alt="preview"
+          style="
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+          "
+        />
     </template>
 
     <!-- Kolaborator (hanya muncul jika checkout_by_name ada) -->
@@ -44,7 +44,8 @@
 <script setup>
 import { computed, defineProps } from "vue";
 
-const defaultBook = new URL("@/assets/img/bookImg.png", import.meta.url).href;
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
+  .href;
 
 const props = defineProps({
   img: { type: String, default: "" },
