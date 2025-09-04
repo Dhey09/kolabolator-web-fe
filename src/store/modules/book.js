@@ -4,7 +4,7 @@ import { api, publicApi } from "@/utils/api";
 const state = () => ({
   books: [],
   bookDetail: [],
-  bookBybook: [],
+  bookByCategory: [],
   editBookId: null,
   total: 0,
   page: 0,
@@ -24,7 +24,7 @@ const getters = {
       })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   },
-  bookBybook: (state) => state.bookBybook,
+  bookByCategory: (state) => state.bookByCategory,
   totalBooks: (state) => state.total,
   page: (state) => state.page,
   perPage: (state) => state.perPage,
@@ -209,7 +209,7 @@ const mutations = {
     state.books = books;
   },
   SET_BOOK_BY_book(state, book) {
-    state.bookBybook = book;
+    state.bookByCategory = book;
   },
   SET_BOOK_DETAIL(state, book) {
     state.bookDetail = book;
