@@ -92,7 +92,7 @@ const actions = {
     }
   },
 
-  async fetchBookBybook({ commit }, payload) {
+  async fetchBookByCategory({ commit }, payload) {
     commit("SET_LOADING", true);
     try {
       const body = {
