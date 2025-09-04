@@ -39,7 +39,7 @@
           <div class="flex flex-col justify-center items-center">
             <div class="font-bold text-gray-500 mb-2">TOTAL PESANAN</div>
             <div class="font-extrabold text-5xl text-green-500 drop-shadow">
-              0
+              {{ chapters ? chapters.length : 0 }}
             </div>
           </div>
         </a-card>
@@ -79,7 +79,10 @@
           class="shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl"
         />
       </div>
-      <div v-else class="flex justify-center items-center w-full py-10 text-gray-300">
+      <div
+        v-else
+        class="flex justify-center items-center w-full py-10 text-gray-300"
+      >
         <a-empty description="Belum ada judul buku terbaru minggu ini" />
       </div>
     </a-card>
@@ -98,19 +101,30 @@ const router = useRouter();
 const user_id = parseInt(localStorage.getItem("userId"));
 const user = computed(() => store.state.user.userDetail);
 const books = computed(() => store.getters["book/newestBooks"]);
+const chapters = computed(
+  () => store.getters["chapter/personalCheckoutChapter"]
+);
+
 const collaborators = computed(
   () => store.getters["collaborator/personalCollaborator"]
 );
 
 const breadcrumbItems = [{ icon: "home-outlined", label: "Dashboard" }];
 
-const handleClick = (item) => {};
+const handleClick = (item) => {
+  localStorage.removeItem("book_id");
+  localStorage.setItem("book_id", item.id);
+  router.push("/chapter-page");
+};
 
 onMounted(async () => {
   await store.dispatch("book/fetchBooks", {});
   await store.dispatch("user/fetchUserById", user_id);
   await store.dispatch("collaborator/fetchPersonalCollaborator", {
     collaborator_id: user_id,
+  });
+  await store.dispatch("chapter/fetchPersonalCheckoutChapter", {
+    checkout_by: user_id,
   });
 });
 </script>
