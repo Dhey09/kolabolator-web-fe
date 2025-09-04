@@ -91,14 +91,16 @@ const handleSubmit = async (values) => {
     const payload = {
       ...values,
     };
+
+    console.log("data", payload);
     await store.dispatch("book/createBook", payload);
-    store.commit("form/SET_UNSAVED", false);
     formData.value = {};
     message.success("Judul buku berhasil ditambahkan");
   } catch (err) {
     console.error("Submit error:", err);
     message.error("Gagal menambahkan judul buku");
   } finally {
+    store.commit("form/SET_UNSAVED", false);
     router.push("/book");
   }
 };

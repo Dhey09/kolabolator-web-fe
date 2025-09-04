@@ -60,7 +60,7 @@ const actions = {
     try {
       const body = {
         title: payload.title,
-        book_id: payload.book_id,
+        category_id: payload.category_id,
         author: payload.author,
         description: payload.description,
         img: payload.img,
