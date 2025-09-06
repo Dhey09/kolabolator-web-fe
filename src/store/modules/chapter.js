@@ -8,6 +8,7 @@ const state = () => ({
   chapterBychapter: [],
   personalCheckoutChapter: [],
   checkoutChapterList: [],
+  transactionList: [],
   editChapterId: null,
   total: 0,
   page: 0,
@@ -22,6 +23,7 @@ const getters = {
   chapterBychapter: (state) => state.chapterBychapter,
   personalCheckoutChapter: (state) => state.personalCheckoutChapter,
   checkoutChapterList: (state) => state.checkoutChapterList,
+  transactionList: (state) => state.transactionList,
   totalChapters: (state) => state.total,
   page: (state) => state.page,
   perPage: (state) => state.perPage,
@@ -48,6 +50,7 @@ const actions = {
       commit("SET_CHAPTERS", data);
     } catch (error) {
       console.error("Error fetching chapters:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -69,6 +72,7 @@ const actions = {
     } catch (error) {
       console.error("Create Chapter Error:", error);
       throw error;
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -86,6 +90,7 @@ const actions = {
       commit("SET_CHAPTER_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching chapter by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -102,9 +107,10 @@ const actions = {
         "/chapters/get-chapter-by-chapter-id",
         body
       );
-      commit("SET_CHAPTER_BY_chapter", response.data.data);
+      commit("SET_CHAPTER_BY_CHAPTER", response.data.data);
     } catch (error) {
       console.error("Error fetching chapter by book:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -125,6 +131,7 @@ const actions = {
       commit("SET_TOTAL_chapter_BY_BOOK", response.data.total);
     } catch (error) {
       console.error("Error fetching chapter by book:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -146,6 +153,7 @@ const actions = {
       await api.post("/chapters/update-chapter", body);
     } catch (error) {
       console.error("Error update chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -158,6 +166,7 @@ const actions = {
       await api.post("/chapters/delete-chapter", body);
     } catch (error) {
       console.error("Error delete chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -173,6 +182,7 @@ const actions = {
       await api.post("/chapters/checkout-chapter", body);
     } catch (error) {
       console.error("Error Checkout Chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -189,6 +199,7 @@ const actions = {
       commit("SET_PERSONAL_CHECKOUT_CHAPTER", response.data.data);
     } catch (error) {
       console.error("Error fetching personal checkout chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -204,6 +215,7 @@ const actions = {
       await api.post("/chapters/payment_proof", body);
     } catch (error) {
       console.error("Error Checkout Chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -216,6 +228,20 @@ const actions = {
       commit("SET_CHECKOUT_CHAPTER_LIST", response.data.data);
     } catch (error) {
       console.error("Error fetching checkout list:", error);
+      throw error;
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
+
+   async fetchTransactionLists({ commit }) {
+    commit("SET_LOADING", true);
+    try {
+      const response = await api.post("/chapters/transaction-chapter", {});
+      commit("SET_TRANSACTION_LIST", response.data.data);
+    } catch (error) {
+      console.error("Error fetching transaction list:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -232,6 +258,7 @@ const actions = {
       await api.post("/chapters/approval-chapter", body);
     } catch (error) {
       console.error("Error approving chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -285,7 +312,7 @@ const mutations = {
   SET_CHAPTERS(state, chapters) {
     state.chapters = chapters;
   },
-  SET_CHAPTER_BY_chapter(state, chapters) {
+  SET_CHAPTER_BY_CHAPTER(state, chapters) {
     state.chapterBychapter = chapters;
   },
   SET_CHAPTER_BY_BOOK(state, chapters) {
@@ -302,6 +329,9 @@ const mutations = {
   },
   SET_CHECKOUT_CHAPTER_LIST(state, chapter) {
     state.checkoutChapterList = chapter;
+  },
+  SET_TRANSACTION_LIST(state, transaction){
+    state.transactionList = transaction
   },
   SET_TOTAL_chapter_BY_BOOK(state, total) {
     state.totalChapterByBook = total;

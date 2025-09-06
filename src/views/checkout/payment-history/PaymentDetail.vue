@@ -14,23 +14,23 @@
         >
           <h2 class="font-bold text-2xl text-gray-800">Detail Pemesanan</h2>
           <div
-            v-if="chapters.status === 'pending'"
+            v-if="chapterData.status === 'pending'"
             class="mt-2 sm:mt-0 text-red-600 font-semibold text-lg"
           >
             ⏳ Batas Waktu: {{ countdown }}
           </div>
           <div
-            v-else-if="chapters.status === 'waiting'"
+            v-else-if="chapterData.status === 'waiting'"
             class="mt-2 sm:mt-0 text-yellow-600 font-semibold text-lg"
           >
             Pembayaran Dalam Proses Pengecekan
           </div>
           <div
-            v-else-if="chapters.status === 'close'"
+            v-else-if="chapterData.status === 'close'"
             class="mt-2 sm:mt-0 text-green-600 font-semibold text-lg"
           >
             Pembayaran sudah dikonfirmasi oleh admin ({{
-              chapters.checked_by_name
+              chapterData.checked_by_name
             }})
           </div>
           <div
@@ -48,7 +48,7 @@
           <!-- Image -->
           <div class="sm:w-1/3">
             <a-image
-              :src="chapters.book_img"
+              :src="chapterData.book_img || defaultBook"
               alt="Book Image"
               class="rounded-lg shadow-md"
               style="width: 100%; height: 220px; object-fit: cover"
@@ -61,37 +61,32 @@
               <tr>
                 <td class="pr-4 font-semibold">Kategori Buku</td>
                 <td>:</td>
-                <td>{{ chapters.category_name }}</td>
+                <td>{{ chapterData.category_name }}</td>
               </tr>
               <tr>
                 <td class="pr-4 font-semibold">Judul Buku</td>
                 <td>:</td>
-                <td>{{ chapters.book_title }}</td>
+                <td>{{ chapterData.book_title }}</td>
               </tr>
               <tr>
                 <td class="pr-4 font-semibold">Bagian</td>
                 <td>:</td>
-                <td>{{ chapters.chapter }}</td>
+                <td>{{ chapterData.chapter }}</td>
               </tr>
               <tr>
                 <td class="pr-4 font-semibold">Judul Bagian</td>
                 <td>:</td>
-                <td>{{ chapters.title }}</td>
+                <td>{{ chapterData.title }}</td>
               </tr>
               <tr>
                 <td class="pr-4 font-semibold">Harga</td>
                 <td>:</td>
-                <td>Rp {{ formatPrice(chapters.price) }}</td>
+                <td>Rp {{ formatPrice(chapterData.price) }}</td>
               </tr>
               <tr>
                 <td class="pr-4 font-semibold">Deadline</td>
                 <td>:</td>
-                <td>{{ chapters.deadline }}</td>
-              </tr>
-              <tr>
-                <td class="pr-4 font-semibold">Status</td>
-                <td>:</td>
-                <td>{{ chapters.status }}</td>
+                <td>{{ chapterData.deadline }}</td>
               </tr>
             </table>
           </div>
@@ -103,7 +98,17 @@
         >
           <p class="sm:w-2/3 text-gray-600 text-sm leading-relaxed">
             **) Pembayaran sedang di check, jika pembayaran belum dikonfirmasi
-            dalam 1 jam, harap hubungi admin dengan nomor 08123456789
+            dalam 1 jam, harap hubungi admin dengan nomor
+            <span>
+              <a
+                href="https://wa.me/qr/R2OTT6OXKBDIJ1"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-green-600 font-medium hover:underline"
+              >
+                0823-1043-3735
+              </a>
+            </span>
           </p>
           <div>
             <!-- Tombol Konfirmasi -->
@@ -133,17 +138,20 @@ import BaseForm from "@/components/BaseForm.vue";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
 
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
+  .href;
+
 const store = useStore();
-const chapters = computed(() => store.state.chapter.chapterDetail);
+const chapters = computed(
+  () => store.getters["chapter/personalCheckoutChapter"]
+);
+const chapterData = computed(() => chapters.value?.[0] || {});
+
 const loading = computed(() => store.getters["chapter/loading"]);
-const payments = computed(() => store.getters["payment/allPayments"]);
 
 const breadcrumbItems = [
-  { label: "Kategori", link: "/" },
-  { label: "Judul Buku", link: "/book-page" },
-  { label: "Judul Bab", link: "/chapter-page" },
-  { label: "Pemesanan", link: "/checkout-page" },
-  { label: "Detail Pemesanan", link: "/checkout-page" },
+  { label: "Riwayat Pembelian", link: "/payment-history" },
+  { label: "Detail Pemesanan" },
 ];
 
 const router = useRouter();
@@ -152,22 +160,11 @@ const formatPrice = (val) => {
   return new Intl.NumberFormat("id-ID").format(val);
 };
 
-const fetchData = async () => {
-  const chapter_id = parseInt(localStorage.getItem("chapter_id"));
-  await store.dispatch("chapter/fetchChapterById", chapter_id);
-};
-const fetchPayment = async () => {
-  await store.dispatch("payment/fetchPayments", {
-    page: 0,
-    per_page: 10,
-  });
-};
-
 const countdown = ref("");
 let timerInterval;
 const startCountdown = () => {
-  if (!chapters.value || !chapters.value.expired_at) return;
-  const target = new Date(chapters.value.expired_at).getTime();
+  if (!chapterData.value || !chapterData.value.expired_at) return;
+  const target = new Date(chapterData.value.expired_at).getTime();
 
   timerInterval = setInterval(() => {
     const now = new Date().getTime();
@@ -189,51 +186,23 @@ const startCountdown = () => {
   }, 1000);
 };
 
-const showModal = ref(false);
-
-const formModel = ref({
-  payment_proof: "",
-});
-
-const formFields = [
-  {
-    label: "Bukti Pembayaran",
-    name: "payment_proof",
-    type: "upload",
-    rules: [{ required: true, message: "Upload bukti pembayaran" }],
-  },
-];
-
-const handleSubmit = async (data) => {
-  const chapter_id = parseInt(localStorage.getItem("chapter_id"));
-
-  const paymentProofUrl =
-    typeof data.payment_proof === "string"
-      ? data.payment_proof
-      : data.payment_proof?.url || "";
-
-  const payload = {
-    id: chapter_id,
-    payment_proof: paymentProofUrl,
-  };
-
-  try {
-    await store.dispatch("chapter/fetchUploadPaymentProof", payload);
-    message.success("Konfirmasi pembayaran berhasil dikirim!");
-    router.push("payment-history");
-    showModal.value = false;
-  } catch (err) {
-    message.error("Gagal mengirim konfirmasi pembayaran");
-  }
-};
-
 const handleClick = () => {
   router.push("/payment-history");
+  localStorage.removeItem("chapter_detail");
+};
+
+const fetchData = async () => {
+  const member_id = parseInt(localStorage.getItem("userId"));
+  const title = localStorage.getItem("chapter_detail");
+  await store.dispatch("chapter/fetchPersonalCheckoutChapter", {
+    checkout_by: member_id,
+    cari: title,
+  });
 };
 
 onMounted(async () => {
   await fetchData();
-  await fetchPayment();
   startCountdown();
+  console.log("data", chapterData.value);
 });
 </script>

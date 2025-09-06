@@ -50,6 +50,7 @@ const actions = {
       commit("SET_BOOKS", data);
     } catch (error) {
       console.error("Error fetching books:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -87,6 +88,7 @@ const actions = {
       commit("SET_BOOK_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching book by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -106,6 +108,7 @@ const actions = {
       commit("SET_BOOK_BY_book", response.data.data);
     } catch (error) {
       console.error("Error fetching book by category:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -126,6 +129,7 @@ const actions = {
       await api.post("/books/update-book", body);
     } catch (error) {
       console.error("Error update book:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -138,6 +142,7 @@ const actions = {
       await api.post("/books/delete-book", body);
     } catch (error) {
       console.error("Error delete book:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -155,6 +160,7 @@ const actions = {
       await api.post("/books/update-book-status", body);
     } catch (error) {
       console.error("Error update book status:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -175,7 +181,7 @@ const actions = {
     }
   },
 
-    async bookTemplate({ commit }) {
+  async bookTemplate({ commit }) {
     commit("SET_LOADING", true);
     try {
       const response = await api.get("/books/template", {

@@ -95,7 +95,11 @@
                 :title="item.title"
                 :price="item.price"
                 :deadline="item.deadline"
-                :disabled="item.status === 'close'"
+                :disabled="
+                  item.status === 'pending' ||
+                  item.status === 'waiting' ||
+                  item.status === 'close'
+                "
                 :checkout_by_name="item.checkout_by_name"
                 :actionText="'Pilih'"
                 :onClick="() => handleClick(item)"

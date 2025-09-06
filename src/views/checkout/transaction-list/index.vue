@@ -5,15 +5,12 @@
   <a-card>
     <BaseButton
       :title="'History Pembelian'"
-      :isAdd="handleAdd"
       :isSearch="handleSearch"
     />
     <a-spin :spinning="loading">
       <BaseTable
         :columns="columns"
-        :data-source="personalCheckout"
-        :onView="viewCheckout"
-        :isAction="true"
+        :data-source="transactionList"
       />
     </a-spin>
   </a-card>
@@ -32,13 +29,13 @@ const router = useRouter();
 const store = useStore();
 const page = ref(0);
 const perPage = ref(10);
-const personalCheckout = computed(
-  () => store.getters["chapter/personalCheckoutChapter"]
+const transactionList = computed(
+  () => store.getters["chapter/transactionList"]
 );
 const loading = computed(() => store.getters["chapter/loading"]);
 
 const handleSearch = (val) => {
-  store.dispatch("chapter/fetchPersonalCheckoutChapter", {
+  store.dispatch("chapter/fetchTransactionLists", {
     cari: val,
   });
 };
@@ -48,7 +45,7 @@ const handleAdd = () => {
 };
 
 const breadcrumbItems = [
-  { icon: "profile-outlined", label: "History Pembelian" },
+  { icon: "shop-outlined", label: "Daftar Transaksi" },
 ];
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -94,18 +91,9 @@ const columns = [
   },
 ];
 
-// Aksi
-const viewCheckout = async (record) => {
-  await store.dispatch("chapter/setEditChapterId", record.id);
-  localStorage.setItem("chapter_detail", record.title);
-  router.push("/payment-detail");
-};
-
 const fetchData = async () => {
   const member_id = parseInt(localStorage.getItem("userId"));
-  await store.dispatch("chapter/fetchPersonalCheckoutChapter", {
-    checkout_by: member_id,
-  });
+  await store.dispatch("chapter/fetchTransactionLists");
 };
 
 onMounted(() => {

@@ -9,9 +9,7 @@
         :columns="columns"
         :data-source="collaborators"
         :onComplete="completeData"
-        :onView="detail"
-        :onUpdateDocument="updateDocument"
-        :isAction="canAction"
+        :isAction="false"
       />
     </a-spin>
   </a-card>
@@ -31,17 +29,17 @@ const store = useStore();
 const page = ref(0);
 const perPage = ref(10);
 const collaborators = computed(
-  () => store.getters["collaborator/personalCollaborator"]
+  () => store.getters["collaborator/allCollaborators"]
 );
 const loading = computed(() => store.getters["collaborator/loading"]);
 
 const handleSearch = (val) => {
-  store.dispatch("collaborator/fetchPersonals", {
+  store.dispatch("collaborator/fetchCollaborators", {
     cari: val,
   });
 };
 
-const breadcrumbItems = [{ icon: "user-outlined", label: "Kolabolator" }];
+const breadcrumbItems = [{ icon: "team-outlined", label: "Daftar Kolaborator" }];
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -90,7 +88,6 @@ const columns = [
   { title: "Judul Buku", dataIndex: "book_title", key: "book_title" },
   { title: "Bagian", dataIndex: "chapter_section", key: "chapter_section" },
   { title: "Judul Bab", dataIndex: "chapter_title", key: "chapter_title" },
-  { title: "Catatan", dataIndex: "notes", key: "notes" },
   {
     title: "Status",
     dataIndex: "status",
@@ -106,34 +103,12 @@ const completeData = async (record) => {
   router.push("/collaborator-upload-script");
 };
 
-const updateDocument = async (record) => {
-  await store.dispatch("collaborator/setEditCollaboratorId", record.id);
-  router.push("/collaborator-upload-script");
-};
-
-const detail = (record) => {
-  if (record.status === "completed") {
-    router.push("/collaborator-detail-complete");
-  } else {
-    if (record.status === "pending") {
-      router.push("/collaborator-detail-pending");
-    }
-  }
-};
-
-const canAction = (record) => {
-  return record.status === "need_update" || record.status === "need_complete";
-};
-
 const fetchData = async () => {
   const user_id = parseInt(localStorage.getItem("userId"));
-  await store.dispatch("collaborator/fetchPersonalCollaborator", {
-    collaborator_id: user_id,
-  });
+  await store.dispatch("collaborator/fetchCollaborators");
 };
 
 onMounted(() => {
   fetchData();
-  console.log("kolaborator", collaborators.value?.status);
 });
 </script>

@@ -107,8 +107,7 @@ const deleteCategory = async (record) => {
     message.success("Kategori berhasil dihapus!");
     await fetchData();
   } catch (err) {
-    message.error("Gagal hapus kategori!");
-    console.error("Gagal hapus kategori:", err);
+    message.error("Gagal hapus kategori!", err);
   } finally {
     loading.value = false; // ⬅️ selesai, loading off
   }
