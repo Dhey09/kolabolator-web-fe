@@ -191,7 +191,11 @@
         <a-space>
           <a-button
             size="small"
-            v-if="onView"
+            v-if="
+              onView &&
+              (record.status !== 'need_update' ||
+                record.status !== 'need_complete')
+            "
             type="link"
             @click="onView(record)"
           >
@@ -293,6 +297,7 @@ const props = defineProps({
   },
   pagination: { type: [Object, Boolean], default: () => ({ pageSize: 5 }) },
   isAction: { type: [Function, Boolean], default: false },
+  isView: { type: [Function, Boolean], default: false },
   onView: Function,
   onEdit: Function,
   onDelete: Function,
@@ -300,7 +305,7 @@ const props = defineProps({
   onApprove: Function,
   onReject: Function,
   onUpdateStatus: Function,
-  onUpdateDocument: Function
+  onUpdateDocument: Function,
 });
 
 const formatRupiah = (value) => {

@@ -6,7 +6,7 @@
     <BaseButton
       :title="'Daftar Kategori'"
       :isAdd="handleAdd"
-      :isExport="handleClickImport"
+      :isImport="handleClickImport"
       :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
@@ -17,6 +17,7 @@
         :scroll="{ x: 'max-conten', y: 380 }"
         :onEdit="editCategory"
         :onDelete="deleteCategory"
+        :isAction="true"
       />
 
       <BaseImport

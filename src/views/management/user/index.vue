@@ -13,6 +13,7 @@
       :data-source="users"
       :onEdit="editUser"
       :onDelete="deleteUser"
+      :isAction="true"
     />
   </a-card>
 </template>
@@ -31,11 +32,9 @@ const page = ref(0);
 const perPage = ref(10);
 const users = computed(() => store.getters["user/allUsers"]);
 
-const handleExport = () => {
-};
+const handleExport = () => {};
 
-const handleDownload = () => {
-};
+const handleDownload = () => {};
 
 const handleSearch = (val) => {
   store.dispatch("user/fetchUsers", {

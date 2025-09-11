@@ -96,7 +96,10 @@
         <div
           class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-8"
         >
-          <p class="sm:w-2/3 text-gray-600 text-sm leading-relaxed">
+          <p
+            v-if="chapterData.status === 'waiting'"
+            class="sm:w-2/3 text-gray-600 text-sm leading-relaxed"
+          >
             **) Pembayaran sedang di check, jika pembayaran belum dikonfirmasi
             dalam 1 jam, harap hubungi admin dengan nomor
             <span>
@@ -108,6 +111,14 @@
               >
                 0823-1043-3735
               </a>
+            </span>
+          </p>
+          <p v-else-if="chapterData.status === 'close'">
+            **) Pembayaran sudah di cek oleh admin,
+            <span>
+              <a-button type="link" style="padding: 0 0 0 0;" @click="goTo">
+                silahkan lengkapi dokumen.
+              </a-button>
             </span>
           </p>
           <div>
@@ -188,6 +199,10 @@ const startCountdown = () => {
 
 const handleClick = () => {
   router.push("/payment-history");
+  localStorage.removeItem("chapter_detail");
+};
+const goTo = () => {
+  router.push("/collaborator");
   localStorage.removeItem("chapter_detail");
 };
 

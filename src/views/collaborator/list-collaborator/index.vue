@@ -3,7 +3,11 @@
     <BaseBreadcrumb :items="breadcrumbItems" />
   </div>
   <a-card>
-    <BaseButton :title="'Kolaborator'" :isSearch="handleSearch" />
+    <BaseButton
+      :title="'Kolaborator'"
+      :isSearch="handleSearch"
+      :isExport="exportFile"
+    />
     <a-spin :spinning="loading">
       <BaseTable
         :columns="columns"
@@ -39,7 +43,9 @@ const handleSearch = (val) => {
   });
 };
 
-const breadcrumbItems = [{ icon: "team-outlined", label: "Daftar Kolaborator" }];
+const breadcrumbItems = [
+  { icon: "team-outlined", label: "Daftar Kolaborator" },
+];
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -101,6 +107,9 @@ const columns = [
 const completeData = async (record) => {
   await store.dispatch("collaborator/setEditCollaboratorId", record.id);
   router.push("/collaborator-upload-script");
+};
+const exportFile = async () => {
+  store.dispatch("collaborator/fetchCollaborationExport");
 };
 
 const fetchData = async () => {

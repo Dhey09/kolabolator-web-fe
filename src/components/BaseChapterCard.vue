@@ -48,7 +48,7 @@ import { computed, defineProps } from "vue";
 import { RightOutlined } from "@ant-design/icons-vue";
 
 const props = defineProps({
-  img: { type: String, required: true },
+  img: { type: [String, null], required: true },
   chapter: { type: String, required: true },
   title: { type: String, required: true },
   price: { type: String, required: true },

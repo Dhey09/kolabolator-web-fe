@@ -174,6 +174,50 @@ const actions = {
       commit("SET_LOADING", false);
     }
   },
+
+  async fetchCollaborationExport({ commit }) {
+    commit("SET_LOADING", true);
+    try {
+      const response = await api.post(
+        "/collaborators/export",
+        {},
+        {
+          responseType: "blob",
+        }
+      );
+
+      // buat blob dari response
+      const blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      // buat link download
+      const link = document.createElement("a");
+      link.href = url;
+
+      // ambil filename dari header, kalau ada
+      const contentDisposition = response.headers["content-disposition"];
+      let fileName = "collaborators.xlsx";
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match) fileName = match[1];
+      }
+
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+
+      // bersihkan
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("❌ Error export:", error);
+      throw error;
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
 };
 
 const mutations = {

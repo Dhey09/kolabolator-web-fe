@@ -4,7 +4,7 @@
   </div>
   <a-card>
     <BaseButton
-      :title="'History Pembelian'"
+      :title="'Riwayat Pembelian'"
       :isAdd="handleAdd"
       :isSearch="handleSearch"
     />
@@ -48,7 +48,7 @@ const handleAdd = () => {
 };
 
 const breadcrumbItems = [
-  { icon: "profile-outlined", label: "History Pembelian" },
+  { icon: "shop-outlined", label: "Riwayat Pembelian" },
 ];
 const formatDate = (dateString) => {
   if (!dateString) return "-";

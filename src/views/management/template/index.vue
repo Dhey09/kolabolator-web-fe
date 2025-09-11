@@ -14,6 +14,7 @@
         :data-source="templates"
         :onEdit="editData"
         :onDelete="deleteData"
+        :isAction="true"
       />
     </a-spin>
   </a-card>
@@ -35,11 +36,9 @@ const perPage = ref(10);
 const templates = computed(() => store.getters["template/allTemplates"]);
 const loading = computed(() => store.getters["template/loading"]);
 
-const handleExport = () => {
-};
+const handleExport = () => {};
 
-const handleDownload = () => {
-};
+const handleDownload = () => {};
 
 const handleSearch = (val) => {
   store.dispatch("template/fetchTemplates", {
