@@ -32,20 +32,14 @@
   <div class="flex p-8">
     <div class="w-full">
       <a-card>
-        <div
-          v-for="item in chapters"
-          :key="item.id"
-          class="flex pb-4 text-2xl font-bold"
-        >
-          {{ item.book_title }}
+        <div v-if="bookDetail" class="flex pb-4 text-2xl font-bold">
+          {{ bookDetail.book_title }}
         </div>
         <hr class="border-1 border-gray-100" />
-        <div class="flex justify-between pt-4">
+        <div class="flex justify-between pt-4" v-if="bookDetail">
           <div>
             <a-image
-              v-for="item in chapters"
-              :key="item.id"
-              :src="item.book_img || defaultBook"
+              :src="bookDetail.book_img || defaultBook"
               alt="Book Image"
               style="
                 width: 80%;
@@ -59,8 +53,8 @@
             <div class="flex flex-col">
               <div>Deskripsi Buku:</div>
               <div class="w-full max-h-[260px]">
-                <a-card v-for="item in chapters" :key="item.id">
-                  {{ item.book_description }}
+                <a-card>
+                  {{ bookDetail.book_description }}
                 </a-card>
               </div>
               <div class="flex justify-end text-2xl mt-2">
@@ -69,6 +63,7 @@
             </div>
           </div>
         </div>
+
         <hr class="border-1 border-gray-100" />
         <BaseTimeline />
 
@@ -143,6 +138,10 @@ const router = useRouter();
 const book_id = parseInt(localStorage.getItem("book_id"));
 const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
   .href;
+
+const bookDetail = computed(() => {
+  return chapters.value && chapters.value.length > 0 ? chapters.value[0] : null;
+});
 
 const goCategory = () => {
   router.push("/");

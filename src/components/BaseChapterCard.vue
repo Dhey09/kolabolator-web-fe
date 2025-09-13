@@ -6,7 +6,7 @@
         alt="preview"
         style="
           width: 100%;
-          height: 300px;
+          height: 100%;
           object-fit: cover;
           border-radius: 6px;
         "
@@ -21,6 +21,9 @@
         <div class="italic">Deadline: {{ deadline }}</div>
         <div v-if="checkout_by_name" class="mt-2 text-sm text-gray-600">
           <strong>Kolaborator:</strong> {{ checkout_by_name }}
+        </div>
+        <div v-else class="mt-2 text-sm text-gray-600">
+          <br/>
         </div>
       </div>
     </div>
