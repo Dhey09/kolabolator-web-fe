@@ -13,6 +13,12 @@
       <template v-if="column.key === 'no'">
         {{ index + 1 }}
       </template>
+      <template v-if="column.key === 'collaborator_name'">
+        {{ record.collaborator_name}} {{ record.collaborator_gelar || null }} 
+      </template>
+       <template v-if="column.key === 'checkout_by_name'">
+        {{ record.checkout_by_name}} {{ record.checkout_by_gelar || null }} 
+      </template>
       <template v-if="column.key === 'price'">
         {{ formatRupiah(record.price) }}
       </template>
