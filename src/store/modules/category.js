@@ -41,6 +41,7 @@ const actions = {
       commit("SET_CATEGORIES", data);
     } catch (error) {
       console.error("Error fetching categories:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -75,6 +76,7 @@ const actions = {
       commit("SET_CATEGORY_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching category by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -92,6 +94,7 @@ const actions = {
       await api.post("/categories/update-category", body);
     } catch (error) {
       console.error("Error update category:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -104,6 +107,7 @@ const actions = {
       await api.post("/categories/delete-category", body);
     } catch (error) {
       console.error("Error delete category:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -119,6 +123,8 @@ const actions = {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return res.data;
+    } catch (error) {
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -142,8 +148,9 @@ const actions = {
       a.download = "category_template.xlsx"; // nama file
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Download gagal:", err);
+    } catch (error) {
+      console.error("Download gagal:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }

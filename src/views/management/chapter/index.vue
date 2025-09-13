@@ -6,7 +6,7 @@
     <BaseButton
       :title="'Daftar Judul Bagian'"
       :isAdd="handleAdd"
-      :isExport="handleClickImport"
+      :isImport="handleClickImport"
       :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
@@ -17,6 +17,7 @@
         :scroll="{ x: 'max-conten', y: 380 }"
         :onEdit="editData"
         :onDelete="deleteData"
+        :isAction="true"
       />
       <BaseImport
         v-model:open="showModal"
@@ -64,9 +65,8 @@ const handleImport = async (file) => {
   }
 };
 
-
 const handleDownload = async () => {
-    await store.dispatch("chapter/chapterTemplate");
+  await store.dispatch("chapter/chapterTemplate");
 };
 
 const handleSearch = (val) => {

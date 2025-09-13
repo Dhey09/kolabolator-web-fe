@@ -6,7 +6,7 @@
     <BaseButton
       :title="'Daftar Judul Buku'"
       :isAdd="handleAdd"
-      :isExport="handleClickImport"
+      :isImport="handleClickImport"
       :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
@@ -18,6 +18,7 @@
         :onEdit="editBook"
         :onDelete="deleteBook"
         :onUpdateStatus="updateStatus"
+        :isAction="true"
       />
       <BaseImport
         v-model:open="showModal"
@@ -38,7 +39,6 @@ import BaseButton from "@/components/BaseButton.vue";
 import { useStore } from "vuex";
 import { message } from "ant-design-vue";
 import BaseImport from "@/components/BaseImport.vue";
-
 
 const router = useRouter();
 const store = useStore();

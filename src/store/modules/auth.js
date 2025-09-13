@@ -48,7 +48,7 @@ const actions = {
 
       return userData;
     } catch (error) {
-      throw error.response?.data?.message || "Login gagal";
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -62,6 +62,7 @@ const actions = {
       localStorage.clear();
     } catch (error) {
       console.error("Error Logout", error);
+       throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -74,6 +75,7 @@ const actions = {
       await publicApi.post("/forgot-password", body);
     } catch (error) {
       console.error("Error send email:", error);
+       throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -90,6 +92,7 @@ const actions = {
       await publicApi.post("/reset-password", body);
     } catch (error) {
       console.error("Error reset pass:", error);
+       throw error;
     } finally {
       commit("SET_LOADING", false);
     }

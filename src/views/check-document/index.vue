@@ -11,6 +11,7 @@
         :scroll="{ x: 'max-conten', y: 380 }"
         :onApprove="approve"
         :onReject="rejectRequest"
+        :isAction="true"
       />
     </a-spin>
   </a-card>
@@ -65,10 +66,9 @@ const approve = async (val) => {
   };
   await store.dispatch("collaborator/fetchApproveCollaborator", payload);
   await fetchData();
-
 };
 
-const breadcrumbItems = [{ icon: "profile-outlined", label: "Cek Dokumen" }];
+const breadcrumbItems = [{ icon: "file-done-outlined", label: "Cek Dokumen" }];
 
 const columns = [
   {

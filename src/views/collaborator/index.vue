@@ -9,6 +9,9 @@
         :columns="columns"
         :data-source="collaborators"
         :onComplete="completeData"
+        :onView="detail"
+        :onUpdateDocument="updateDocument"
+        :isAction="canAction"
       />
     </a-spin>
   </a-card>
@@ -87,6 +90,7 @@ const columns = [
   { title: "Judul Buku", dataIndex: "book_title", key: "book_title" },
   { title: "Bagian", dataIndex: "chapter_section", key: "chapter_section" },
   { title: "Judul Bab", dataIndex: "chapter_title", key: "chapter_title" },
+  { title: "Catatan", dataIndex: "notes", key: "notes" },
   {
     title: "Status",
     dataIndex: "status",
@@ -102,6 +106,25 @@ const completeData = async (record) => {
   router.push("/collaborator-upload-script");
 };
 
+const updateDocument = async (record) => {
+  await store.dispatch("collaborator/setEditCollaboratorId", record.id);
+  router.push("/collaborator-upload-script");
+};
+
+const detail = (record) => {
+  if (record.status === "completed") {
+    router.push("/collaborator-detail-complete");
+  } else {
+    if (record.status === "pending") {
+      router.push("/collaborator-detail-pending");
+    }
+  }
+};
+
+const canAction = (record) => {
+  return record.status === "need_update" || record.status === "need_complete";
+};
+
 const fetchData = async () => {
   const user_id = parseInt(localStorage.getItem("userId"));
   await store.dispatch("collaborator/fetchPersonalCollaborator", {
@@ -111,5 +134,6 @@ const fetchData = async () => {
 
 onMounted(() => {
   fetchData();
+  console.log("kolaborator", collaborators.value?.status);
 });
 </script>

@@ -15,7 +15,7 @@ const state = () => ({
 });
 
 const getters = {
-  allBooks: (state) => state.collaborators,
+  allCollaborators: (state) => state.collaborators,
   personalCollaborator: (state) => state.personalCollaborator,
   totalCollaborators: (state) => state.total,
   page: (state) => state.page,
@@ -47,6 +47,7 @@ const actions = {
       commit("SET_COLLABORATORS", data);
     } catch (error) {
       console.error("Error fetching collaborators:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -66,6 +67,7 @@ const actions = {
       commit("SET_COLLABORATOR_BY_CHAPTER", response.data.data);
     } catch (error) {
       console.error("Error fetching collaborator by chapter:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -82,6 +84,7 @@ const actions = {
       commit("SET_COLLABORATOR_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching collaborator by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -100,6 +103,7 @@ const actions = {
       commit("SET_PERSONAL_COLLABORATOR", response.data.data);
     } catch (error) {
       console.error("Error fetching personal collaborator:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -119,6 +123,7 @@ const actions = {
       await api.post("/collaborators/update-collaborator", body);
     } catch (error) {
       console.error("Error update collaborator:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -131,6 +136,7 @@ const actions = {
       await api.post("/collaborators/approve-collaborator", body);
     } catch (error) {
       console.error("Error approve collaborator:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -148,6 +154,7 @@ const actions = {
       await api.post("/collaborators/need-update-collaborator", body);
     } catch (error) {
       console.error("Error update collaborator status:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -162,6 +169,51 @@ const actions = {
       commit("SET_COLLABORATOR_BY_PENDING", response.data.data);
     } catch (error) {
       console.error("Error fetch data:", error);
+      throw error;
+    } finally {
+      commit("SET_LOADING", false);
+    }
+  },
+
+  async fetchCollaborationExport({ commit }) {
+    commit("SET_LOADING", true);
+    try {
+      const response = await api.post(
+        "/collaborators/export",
+        {},
+        {
+          responseType: "blob",
+        }
+      );
+
+      // buat blob dari response
+      const blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      // buat link download
+      const link = document.createElement("a");
+      link.href = url;
+
+      // ambil filename dari header, kalau ada
+      const contentDisposition = response.headers["content-disposition"];
+      let fileName = "collaborators.xlsx";
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match) fileName = match[1];
+      }
+
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+
+      // bersihkan
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("❌ Error export:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }

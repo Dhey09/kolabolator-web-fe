@@ -27,10 +27,23 @@
 
     <template #actions>
       <a-button
-        v-if="onClick"
+        v-if="onClick && role"
         class="w-full"
         type="primary"
         :disabled="isDisabled"
+        @click="onClick"
+      >
+        <div class="flex justify-center items-center">
+          <a-space>
+            {{ actionText }}
+          </a-space>
+        </div>
+      </a-button>
+      <a-button
+        v-else
+        v-if="onClick"
+        class="w-full"
+        type="primary"
         @click="onClick"
       >
         <div class="flex justify-center items-center">
@@ -48,7 +61,7 @@ import { computed, defineProps } from "vue";
 import { RightOutlined } from "@ant-design/icons-vue";
 
 const props = defineProps({
-  img: { type: String, required: true },
+  img: { type: [String, null], required: true },
   chapter: { type: String, required: true },
   title: { type: String, required: true },
   price: { type: String, required: true },
@@ -69,6 +82,7 @@ const formatRupiah = (value) => {
   }).format(value);
 };
 const isDisabled = computed(() => props.disabled);
+const role = parseInt(localStorage.getItem("role_id"));
 
 const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
   .href;

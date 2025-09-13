@@ -4,16 +4,16 @@
   </div>
   <a-card>
     <BaseButton
-      :title="'Riwayat Pembelian'"
-      :isAdd="handleAdd"
+      :title="'Kolaborator'"
       :isSearch="handleSearch"
+      :isExport="exportFile"
     />
     <a-spin :spinning="loading">
       <BaseTable
         :columns="columns"
-        :data-source="personalCheckout"
-        :onView="viewCheckout"
-        :isAction="true"
+        :data-source="collaborators"
+        :onComplete="completeData"
+        :isAction="false"
       />
     </a-spin>
   </a-card>
@@ -32,24 +32,21 @@ const router = useRouter();
 const store = useStore();
 const page = ref(0);
 const perPage = ref(10);
-const personalCheckout = computed(
-  () => store.getters["chapter/personalCheckoutChapter"]
+const collaborators = computed(
+  () => store.getters["collaborator/allCollaborators"]
 );
-const loading = computed(() => store.getters["chapter/loading"]);
+const loading = computed(() => store.getters["collaborator/loading"]);
 
 const handleSearch = (val) => {
-  store.dispatch("chapter/fetchPersonalCheckoutChapter", {
+  store.dispatch("collaborator/fetchCollaborators", {
     cari: val,
   });
 };
 
-const handleAdd = () => {
-  router.push("/");
-};
-
 const breadcrumbItems = [
-  { icon: "shop-outlined", label: "Riwayat Pembelian" },
+  { icon: "team-outlined", label: "Daftar Kolaborator" },
 ];
+
 const formatDate = (dateString) => {
   if (!dateString) return "-";
   const date = new Date(dateString);
@@ -70,42 +67,54 @@ const formatRupiah = (value) => {
 
 const columns = [
   {
+    title: "Bukti Bayar",
+    dataIndex: "chapter_payment_proof",
+    key: "chapter_payment_proof",
+    fixed: "left",
+    align: "center",
+  },
+  { title: "Nama", dataIndex: "collaborator_name", key: "collaborator_name" },
+  {
+    title: "Email",
+    dataIndex: "collaborator_email",
+    key: "collaborator_email",
+  },
+  {
+    title: "Nomor Telephone",
+    dataIndex: "collaborator_phone",
+    key: "collaborator_phone",
+  },
+  {
     title: "Tanggal",
-    dataIndex: "createdAt",
-    key: "createdAt",
+    dataIndex: "reviewed_at",
+    key: "reviewed_at",
     customRender: ({ text }) => formatDate(text),
   },
   { title: "Kategori Buku", dataIndex: "category_name", key: "category_name" },
   { title: "Judul Buku", dataIndex: "book_title", key: "book_title" },
-  { title: "Bab", dataIndex: "chapter", key: "chapter" },
-  { title: "Judul Bab", dataIndex: "title", key: "title" },
+  { title: "Bagian", dataIndex: "chapter_section", key: "chapter_section" },
+  { title: "Judul Bab", dataIndex: "chapter_title", key: "chapter_title" },
   {
-    title: "Total Bayar",
-    dataIndex: "price",
-    key: "price",
-    customRender: ({ text }) => formatRupiah(text),
-  },
-  {
-    title: "Status Pembayaran",
+    title: "Status",
     dataIndex: "status",
     key: "status",
-    fixed: "right",
     align: "center",
+    fixed: "right",
   },
 ];
 
 // Aksi
-const viewCheckout = async (record) => {
-  await store.dispatch("chapter/setEditChapterId", record.id);
-  localStorage.setItem("chapter_detail", record.title);
-  router.push("/payment-detail");
+const completeData = async (record) => {
+  await store.dispatch("collaborator/setEditCollaboratorId", record.id);
+  router.push("/collaborator-upload-script");
+};
+const exportFile = async () => {
+  store.dispatch("collaborator/fetchCollaborationExport");
 };
 
 const fetchData = async () => {
-  const member_id = parseInt(localStorage.getItem("userId"));
-  await store.dispatch("chapter/fetchPersonalCheckoutChapter", {
-    checkout_by: member_id,
-  });
+  const user_id = parseInt(localStorage.getItem("userId"));
+  await store.dispatch("collaborator/fetchCollaborators");
 };
 
 onMounted(() => {

@@ -14,6 +14,7 @@
         :data-source="payments"
         :onEdit="editPayment"
         :onDelete="deletePayment"
+        :isAction="true"
       />
     </a-spin>
   </a-card>
@@ -35,11 +36,9 @@ const perPage = ref(10);
 const payments = computed(() => store.getters["payment/allPayments"]);
 const loading = computed(() => store.getters["payment/loading"]);
 
-const handleExport = () => {
-};
+const handleExport = () => {};
 
-const handleDownload = () => {
-};
+const handleDownload = () => {};
 
 const handleSearch = (val) => {
   store.dispatch("payment/fetchPayments", {

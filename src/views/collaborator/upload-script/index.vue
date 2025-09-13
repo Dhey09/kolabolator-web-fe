@@ -8,6 +8,7 @@
       :title="'Upload Naskah'"
       :fields="fields"
       :rules="rules"
+      downloadTemplate
       @submit="handleSubmit(formData)"
       @cancel="handleCancel"
     />
@@ -32,13 +33,17 @@ const router = useRouter();
 const store = useStore();
 const formData = ref({});
 const loading = computed(() => store.state.collaborator.loading);
-const collaborators = computed(() => store.state.collaborator.collaborators);
 const editCollaboratorId = computed(
   () => store.state.collaborator.editCollaboratorId
 );
 
 // field awal tanpa options
 const fields = ref([
+  {
+    type: "upload",
+    name: "identity",
+    label: "Upload KTP",
+  },
   {
     type: "file",
     name: "script",
@@ -50,11 +55,6 @@ const fields = ref([
     label: "Upload HAKI",
   },
   {
-    type: "upload",
-    name: "identity",
-    label: "Upload KTP",
-  },
-  {
     type: "textarea",
     name: "address",
     label: "Alamat Pengiriman",
@@ -63,9 +63,9 @@ const fields = ref([
 ]);
 
 const rules = {
-  script_url: [{ required: true, message: "Harus upload Naskah" }],
-  haki_url: [{ required: true, message: "Harus upload HAKI" }],
-  identity_url: [{ required: true, message: "Harus upload KTP" }],
+  script: [{ required: true, message: "Harus upload Naskah" }],
+  haki: [{ required: true, message: "Harus upload HAKI" }],
+  identity: [{ required: true, message: "Harus upload KTP" }],
   address: [{ required: true, message: "Alamat harus diisi!" }],
 };
 

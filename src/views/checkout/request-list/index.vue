@@ -13,6 +13,7 @@
         :data-source="checkoutLists"
         :onApprove="approveRequest"
         :onReject="rejectRequest"
+        :isAction="true"
       />
     </a-spin>
   </a-card>
@@ -62,7 +63,7 @@ const handleSearch = (val) => {
 };
 
 const breadcrumbItems = [
-  { icon: "profile-outlined", label: "Daftar Permintaan" },
+  { icon: "tag-outlined", label: "Daftar Permintaan" },
 ];
 
 const columns = [

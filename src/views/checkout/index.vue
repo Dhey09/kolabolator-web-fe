@@ -39,7 +39,7 @@
           <!-- Image -->
           <div class="sm:w-1/3">
             <a-image
-              :src="chapters.book_img"
+              :src="chapters.book_img || defaultBook"
               alt="Book Image"
               class="rounded-lg shadow-md"
               style="width: 100%; height: 220px; object-fit: cover"
@@ -57,7 +57,7 @@
               <tr>
                 <td class="pr-4 font-semibold">Judul Buku</td>
                 <td>:</td>
-                <td>{{ chapters.book_title }}</td>
+                <td>{{  chapters.book_title  }}</td>
               </tr>
               <tr>
                 <td class="pr-4 font-semibold">Bagian</td>
@@ -164,6 +164,9 @@ const store = useStore();
 const chapters = computed(() => store.state.chapter.chapterDetail);
 const loading = computed(() => store.getters["chapter/loading"]);
 const payments = computed(() => store.getters["payment/allPayments"]);
+
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
+  .href;
 
 const breadcrumbItems = [
   { label: "Kategori", link: "/" },

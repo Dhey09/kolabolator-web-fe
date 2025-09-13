@@ -8,9 +8,21 @@
       <!-- Export Button -->
       <a-tooltip placement="top">
         <template #title>
-          <span>Import File</span>
+          <span>Export File</span>
         </template>
         <a-button v-if="isExport" type="default" @click="isExport">
+          <div class="flex items-center justify-center">
+            <FileExcelOutlined />
+          </div>
+        </a-button>
+      </a-tooltip>
+
+      <!-- Impot Button -->
+      <a-tooltip placement="top">
+        <template #title>
+          <span>Import File</span>
+        </template>
+        <a-button v-if="isImport" type="default" @click="isImport">
           <div class="flex items-center justify-center">
             <FileExcelOutlined />
           </div>
@@ -71,6 +83,7 @@ const props = defineProps({
   title: { type: String, default: "" },
   isAdd: { type: Function, default: null },
   isExport: { type: Function, default: null },
+  isImport: { type: Function, default: null },
   isDownload: { type: Function, default: null },
   isSearch: { type: Function, default: null }, // opsional search button
 });

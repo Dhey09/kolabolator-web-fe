@@ -5,6 +5,9 @@ import Profile from "@/views/profile/index.vue";
 import UpdateProfile from "@/views/profile/update-profile/index.vue";
 
 import Collaborator from "@/views/collaborator/index.vue";
+import CompleteCollaborator from "@/views/collaborator/CompleteDetail.vue";
+import PendingCollaborator from "@/views/collaborator/WaitingDetail.vue";
+import ListCollaborator from "@/views/collaborator/list-collaborator/index.vue";
 import UploadScript from "@/views/collaborator/upload-script/index.vue";
 import CheckDocument from "@/views/check-document/index.vue";
 
@@ -24,6 +27,7 @@ import UpdateTimeline from "@/views/management/book/update-timeline/index.vue";
 import Chapters from "@/views/management/chapter/index.vue";
 import AddChapter from "@/views/management/chapter/add-chapter/index.vue";
 import EditChapter from "@/views/management/chapter/edit-chapter/index.vue";
+import ListTransaction from "@/views/checkout/transaction-list/index.vue";
 
 import Templates from "@/views/management/template/index.vue";
 import AddTemplate from "@/views/management/template/add-template/index.vue";
@@ -50,6 +54,13 @@ export default {
     { path: "profile-update", name: "UpdateProfile", component: UpdateProfile },
 
     { path: "collaborator", name: "Collaborator", component: Collaborator },
+     { path: "collaborator-detail-complete", name: "CompleteCollaborator", component: CompleteCollaborator },
+      { path: "collaborator-detail-pending", name: "PendingCollaborator", component: PendingCollaborator },
+    {
+      path: "list-collaborator",
+      name: "ListCollaborator",
+      component: ListCollaborator,
+    },
     {
       path: "collaborator-upload-script",
       name: "UploadScript",
@@ -104,6 +115,11 @@ export default {
       path: "request-list",
       name: "RequestLists",
       component: RequestLists,
+    },
+    {
+      path: "list-transaction",
+      name: "TransactionList",
+      component: ListTransaction,
     },
 
     //submenu Kategori

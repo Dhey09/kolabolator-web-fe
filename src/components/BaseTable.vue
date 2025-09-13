@@ -13,6 +13,9 @@
       <template v-if="column.key === 'no'">
         {{ index + 1 }}
       </template>
+      <template v-if="column.key === 'price'">
+        {{ formatRupiah(record.price) }}
+      </template>
 
       <template v-else-if="column.key === 'script'">
         <a-button
@@ -184,17 +187,15 @@
       </template>
 
       <!-- Kolom Actions -->
-      <template
-        v-else-if="
-          column.key === 'actions' &&
-          record.status !== 'completed' &&
-          record.status !== 'close'
-        "
-      >
+      <template v-else-if="isAction && column.key === 'actions'">
         <a-space>
           <a-button
             size="small"
-            v-if="onView"
+            v-if="
+              onView &&
+              (record.status !== 'need_update' ||
+                record.status !== 'need_complete')
+            "
             type="link"
             @click="onView(record)"
           >
@@ -219,6 +220,7 @@
               <DeleteOutlined />
             </a-button>
           </a-popconfirm>
+
           <a-button
             size="small"
             v-if="onReject"
@@ -248,22 +250,23 @@
             Lengkapi
           </a-button>
 
-          <a-button
+          <!-- <a-button
             size="small"
             v-if="
-              (onComplete && record.status === 'pending') ||
-              record.status === 'completed'
+              onView &&
+              (record.status === 'pending' || record.status === 'completed')
             "
             type="primary"
-            @click="onComplete(record)"
+            @click="onView(record)"
           >
             Lihat Detail
-          </a-button>
+          </a-button> -->
+
           <a-button
             size="small"
-            v-if="onComplete && record.status === 'need_update'"
+            v-if="onUpdateDocument && record.status === 'need_update'"
             type="primary"
-            @click="onComplete(record)"
+            @click="onUpdateDocument(record)"
           >
             Perbaiki Dokumen
           </a-button>
@@ -281,7 +284,8 @@ import {
 } from "@ant-design/icons-vue";
 import { computed } from "vue";
 
-const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url).href;
+const defaultBook = new URL("@/assets/img/default_img.jpeg", import.meta.url)
+  .href;
 
 const props = defineProps({
   columns: { type: Array, required: true },
@@ -292,6 +296,8 @@ const props = defineProps({
     default: () => ({ x: "max-content" }),
   },
   pagination: { type: [Object, Boolean], default: () => ({ pageSize: 5 }) },
+  isAction: { type: [Function, Boolean], default: false },
+  isView: { type: [Function, Boolean], default: false },
   onView: Function,
   onEdit: Function,
   onDelete: Function,
@@ -299,7 +305,18 @@ const props = defineProps({
   onApprove: Function,
   onReject: Function,
   onUpdateStatus: Function,
+  onUpdateDocument: Function,
 });
+
+const formatRupiah = (value) => {
+  if (value == null || value === "") return "-";
+
+  const formatted = new Intl.NumberFormat("id-ID", {
+    minimumFractionDigits: 0,
+  }).format(value);
+
+  return `Rp. ${formatted}`;
+};
 
 const downloadFile = async (url, userName, type) => {
   try {
@@ -337,13 +354,14 @@ const computedColumns = computed(() => {
 
   // Kolom Actions (fixed right)
   if (
-    props.onView ||
-    props.onEdit ||
-    props.onDelete ||
-    props.onApprove ||
-    props.onReject ||
-    props.onComplete ||
-    props.onUpdateStatus
+    props.isAction &&
+    (props.onView ||
+      props.onEdit ||
+      props.onDelete ||
+      props.onApprove ||
+      props.onReject ||
+      props.onComplete ||
+      props.onUpdateStatus)
   ) {
     cols.push({
       title: "Actions",

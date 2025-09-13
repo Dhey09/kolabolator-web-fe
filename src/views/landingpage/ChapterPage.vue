@@ -95,7 +95,12 @@
                 :title="item.title"
                 :price="item.price"
                 :deadline="item.deadline"
-                :disabled="item.status === 'close'"
+                :disabled="
+                  item.status === 'pending' ||
+                  item.status === 'waiting' ||
+                  item.status === 'close' ||
+                  role !== 3
+                "
                 :checkout_by_name="item.checkout_by_name"
                 :actionText="'Pilih'"
                 :onClick="() => handleClick(item)"
@@ -165,6 +170,8 @@ const fetchData = () => {
     cari: "",
   });
 };
+
+const role = parseInt(localStorage.getItem("role_id"));
 
 onMounted(() => {
   fetchData();

@@ -6,7 +6,7 @@
     <BaseButton
       :title="'Daftar Kategori'"
       :isAdd="handleAdd"
-      :isExport="handleClickImport"
+      :isImport="handleClickImport"
       :isDownload="handleDownload"
       :isSearch="handleSearch"
     />
@@ -17,6 +17,7 @@
         :scroll="{ x: 'max-conten', y: 380 }"
         :onEdit="editCategory"
         :onDelete="deleteCategory"
+        :isAction="true"
       />
 
       <BaseImport
@@ -107,8 +108,7 @@ const deleteCategory = async (record) => {
     message.success("Kategori berhasil dihapus!");
     await fetchData();
   } catch (err) {
-    message.error("Gagal hapus kategori!");
-    console.error("Gagal hapus kategori:", err);
+    message.error("Gagal hapus kategori!", err);
   } finally {
     loading.value = false; // ⬅️ selesai, loading off
   }

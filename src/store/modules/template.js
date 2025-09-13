@@ -38,6 +38,7 @@ const actions = {
       commit("SET_TEMPLATES", data);
     } catch (error) {
       console.error("Error fetching templates:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -54,6 +55,7 @@ const actions = {
       await api.post("/templates/create-template", body);
     } catch (error) {
       console.error("Create Template Error:", error);
+      throw error;
       throw error;
     } finally {
       commit("SET_LOADING", false);
@@ -72,6 +74,7 @@ const actions = {
       commit("SET_TEMPLATE_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching template by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -89,6 +92,7 @@ const actions = {
       await api.post("/templates/update-template", body);
     } catch (error) {
       console.error("Error update template:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -101,6 +105,7 @@ const actions = {
       await api.post("/templates/delete-template", body);
     } catch (error) {
       console.error("Error delete template:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }

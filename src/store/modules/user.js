@@ -43,6 +43,7 @@ const actions = {
       commit("SET_ROLES", data);
     } catch (error) {
       console.error("Error fetching users:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -67,6 +68,7 @@ const actions = {
       commit("SET_USERS", data);
     } catch (error) {
       console.error("Error fetching users:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -86,6 +88,7 @@ const actions = {
       await publicApi.post("/users/create-user", body);
     } catch (error) {
       console.error("Error fetching users:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -103,6 +106,7 @@ const actions = {
       commit("SET_USER_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching user by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -116,6 +120,7 @@ const actions = {
       commit("SET_USER_EMAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching user email:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -143,6 +148,7 @@ const actions = {
       await api.post("/users/update-user", body);
     } catch (error) {
       console.error("Error update users:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -155,6 +161,7 @@ const actions = {
       await api.post("/users/delete-user", body);
     } catch (error) {
       console.error("Error fetching user by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }

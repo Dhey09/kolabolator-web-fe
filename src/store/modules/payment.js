@@ -38,6 +38,7 @@ const actions = {
       commit("SET_PAYMENTS", data);
     } catch (error) {
       console.error("Error fetching payments:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -54,6 +55,7 @@ const actions = {
       await api.post("/payments/create-payment", body);
     } catch (error) {
       console.error("Error add payments:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -71,6 +73,7 @@ const actions = {
       commit("SET_PAYMENT_DETAIL", response.data.data);
     } catch (error) {
       console.error("Error fetching payment by id:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -88,6 +91,7 @@ const actions = {
       await api.post("/payments/update-payment", body);
     } catch (error) {
       console.error("Error edit payments:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }
@@ -100,6 +104,7 @@ const actions = {
       await api.post("/payments/delete-payment", body);
     } catch (error) {
       console.error("Error delete payment:", error);
+      throw error;
     } finally {
       commit("SET_LOADING", false);
     }

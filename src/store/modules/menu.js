@@ -1,5 +1,6 @@
 const state = {
   menus: [
+    //Dashboard
     {
       key: "dashboard",
       label: "Dashboard",
@@ -7,27 +8,53 @@ const state = {
       icon: "dashboard",
       role_id: [1, 2, 3],
     },
-    {
-      key: "check-document",
-      label: "Pengecekan Dokumen",
-      path: "/check-document",
-      icon: "fileDone",
-      role_id: [1, 2],
-    },
+
+    // Kolaborator per user
     {
       key: "collaborator",
       label: "Kolaborator",
       path: "/collaborator",
       icon: "team",
-      role_id: [1, 2, 3],
+      role_id: [3],
     },
-    //  {
-    //   key: "list-collaborator",
-    //   label: "Daftar Kolaborator",
-    //   path: "/list-collaborator",
-    //   icon: "team",
-    //   role_id: [1, 2],
-    // },
+
+    //Riwayat Transaksi
+    {
+      key: "payment_history",
+      label: "Riwayat Pembelian",
+      path: "/payment-history",
+      icon: "shop",
+      role_id: [3],
+    },
+
+    // List Menu Kategori
+    {
+      key: "category",
+      label: "Kategori",
+      icon: "read",
+      role_id: [1, 2, 3],
+      children: [],
+    },
+
+    // Daftar Kolaborator
+    {
+      key: "list-collaborator",
+      label: "Daftar Kolaborator",
+      path: "/list-collaborator",
+      icon: "team",
+      role_id: [1, 2],
+    },
+
+    // Daftar Transaksi
+    {
+      key: "transaction_list",
+      label: "Daftar Transaksi",
+      path: "/list-transaction",
+      icon: "shop",
+      role_id: [1, 2],
+    },
+
+    // Cek Pembayaran
     {
       key: "request_list",
       label: "Cek Pembayaran",
@@ -35,13 +62,17 @@ const state = {
       icon: "tag",
       role_id: [1, 2],
     },
+
+    //Cek Dokumen
     {
-      key: "payment_history",
-      label: "Riwayat Pembelian",
-      path: "/payment-history",
-      icon: "shop",
-      role_id: [1, 2, 3],
+      key: "check-document",
+      label: "Pengecekan Dokumen",
+      path: "/check-document",
+      icon: "fileDone",
+      role_id: [1, 2],
     },
+
+    // Manajemen
     {
       key: "management",
       label: "Manajemen",
@@ -93,28 +124,8 @@ const state = {
         },
       ],
     },
-    {
-      key: "category",
-      label: "Kategori",
-      icon: "read",
-      role_id: [1, 2, 3],
-      children: [
-        // {
-        //   key: "bahasa",
-        //   label: "Bahasa",
-        //   icon: "book",
-        //   path: "/posts",
-        //   role_id: [1, 2, 3],
-        // },
-        // {
-        //   key: "agama",
-        //   label: "Agama",
-        //   icon: "book",
-        //   path: "/category",
-        //   role_id: [1, 2, 3],
-        // },
-      ],
-    },
+
+    // User Profile
     {
       key: "profile",
       label: "Profil",
