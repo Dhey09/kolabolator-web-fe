@@ -3,15 +3,9 @@
     <BaseBreadcrumb :items="breadcrumbItems" />
   </div>
   <a-card>
-    <BaseButton
-      :title="'History Pembelian'"
-      :isSearch="handleSearch"
-    />
+    <BaseButton :title="'History Pembelian'" :isSearch="handleSearch" />
     <a-spin :spinning="loading">
-      <BaseTable
-        :columns="columns"
-        :data-source="transactionList"
-      />
+      <BaseTable :columns="columns" :data-source="transactionList" />
     </a-spin>
   </a-card>
 </template>
@@ -44,9 +38,7 @@ const handleAdd = () => {
   router.push("/");
 };
 
-const breadcrumbItems = [
-  { icon: "shop-outlined", label: "Daftar Transaksi" },
-];
+const breadcrumbItems = [{ icon: "shop-outlined", label: "Daftar Transaksi" }];
 const formatDate = (dateString) => {
   if (!dateString) return "-";
   const date = new Date(dateString);
@@ -66,6 +58,17 @@ const formatRupiah = (value) => {
 };
 
 const columns = [
+  {
+    title: "Bukti Pembayaran",
+    dataIndex: "payment_proof",
+    key: "payment_proof",
+  },
+  {
+    title: "Nama",
+    dataIndex: "checkout_by_name",
+    key: "checkout_by_name",
+  },
+
   {
     title: "Tanggal",
     dataIndex: "createdAt",
