@@ -97,6 +97,7 @@ const columns = [
   { title: "Naskah", dataIndex: "script", key: "script" },
   { title: "HAKI", dataIndex: "haki", key: "haki" },
   { title: "KTP", dataIndex: "identity", key: "identity" },
+  { title: "Alamat Pengiriman", dataIndex: "address", key: "address" },
   {
     title: "Status",
     dataIndex: "status",
