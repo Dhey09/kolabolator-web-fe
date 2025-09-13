@@ -2,7 +2,7 @@
 import axios from "axios";
 import store from "@/store";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // ========== API dengan Token ==========
 const api = axios.create({

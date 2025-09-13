@@ -159,8 +159,8 @@ const props = defineProps({
   rules: { type: Object, default: () => ({}) },
 });
 
-const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "dj09sapfq";
+const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "book_collab";
 
 const emits = defineEmits(["update:modelValue", "submit", "cancel", "change"]);
 
