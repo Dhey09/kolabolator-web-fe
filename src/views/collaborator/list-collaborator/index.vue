@@ -94,6 +94,9 @@ const columns = [
   { title: "Judul Buku", dataIndex: "book_title", key: "book_title" },
   { title: "Bagian", dataIndex: "chapter_section", key: "chapter_section" },
   { title: "Judul Bab", dataIndex: "chapter_title", key: "chapter_title" },
+  { title: "Naskah", dataIndex: "script", key: "script" },
+  { title: "HAKI", dataIndex: "haki", key: "haki" },
+  { title: "KTP", dataIndex: "identity", key: "identity" },
   {
     title: "Status",
     dataIndex: "status",
