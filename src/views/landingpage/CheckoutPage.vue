@@ -25,11 +25,7 @@
     <div class="w-full">
       <a-card>
         <div class="flex pb-4 font-bold text-2xl">Pemesanan</div>
-        <BaseTable
-          :columns="columns"
-          :data-source="chapters"
-          :pagination="false"
-        />
+        <BaseTable :columns="columns" :data-source="data" :pagination="false" />
 
         <div class="flex justify-between items-center mt-4">
           <div>
@@ -47,7 +43,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import BaseTable from "@/components/BaseTable.vue";
@@ -55,7 +51,18 @@ import { useStore } from "vuex";
 import { message } from "ant-design-vue";
 
 const store = useStore();
-const chapters = computed(() => store.getters["chapter/chapterByBook"]);
+const chapterId = parseInt(localStorage.getItem("chapter_id"));
+const chapters = computed(() => store.getters["chapter/chapterDetail"]);
+const data = [
+  {
+    category_name: chapters.value.category_name,
+    book_title: chapters.value.book_title,
+    chapter: chapters.value.chapter,
+    title: chapters.value.title,
+    deadline: chapters.value.deadline,
+    price: chapters.value.price,
+  },
+];
 const loading = computed(() => store.getters["chapter/loading"]);
 
 const breadcrumbItems = [
@@ -93,4 +100,12 @@ const handleClick = async () => {
     loading.value = false;
   }
 };
+
+const fetchData = async () => {
+  await store.dispatch("chapter/fetchChapterById", chapterId);
+};
+
+onMounted(async () => {
+  await fetchData();
+});
 </script>
