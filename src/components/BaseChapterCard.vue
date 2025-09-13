@@ -20,7 +20,7 @@
         <div class="">{{ formatRupiah(price) }}</div>
         <div class="italic">Deadline: {{ deadline }}</div>
         <div v-if="checkout_by_name" class="mt-2 text-sm text-gray-600">
-          <strong>Kolaborator:</strong> {{ checkout_by_name }}
+          <strong>Kolaborator:</strong> {{ checkout_by_name }} {{ checkout_by_gelar }}
         </div>
         <div v-else class="mt-2 text-sm text-gray-600">
           <br/>
@@ -73,6 +73,7 @@ const props = defineProps({
   width: { type: Number, default: 300 },
   onClick: { type: Function, default: () => {} },
   checkout_by_name: { type: String, default: null },
+  checkout_by_gelar: { type: String, default: null },
   disabled: { type: Boolean, default: false },
 });
 

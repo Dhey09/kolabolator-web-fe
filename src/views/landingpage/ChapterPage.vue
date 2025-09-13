@@ -97,6 +97,7 @@
                   role !== 3
                 "
                 :checkout_by_name="item.checkout_by_name"
+                :checkout_by_gelar="item.checkout_by_gelar"
                 :actionText="'Pilih'"
                 :onClick="() => handleClick(item)"
               />
